@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
 
 public class APIRequest {
     private final URL url;
+    private final Map<String, String> headers = new HashMap<>();
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
 
     public interface ResponseCallback {
@@ -37,15 +38,22 @@ public class APIRequest {
         } else {
             url = new URL(urlString);
         }
-
     }
 
-    private void makeRequest(ResponseCallback callback) {
+    public void addHeader(String key, String value) {
+        headers.put(key, value);
+    }
+
+    public void makeRequest(ResponseCallback callback) {
         Callable<Map<String, Object>> callable = () -> {
             HttpURLConnection httpURLConnection = null;
 
             try {
                 httpURLConnection = (HttpURLConnection) url.openConnection();
+
+                for (Map.Entry<String, String> header : headers.entrySet()) {
+                    httpURLConnection.setRequestProperty(header.getKey(), header.getValue());
+                }
 
                 InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
                 String parsedResponse = readStream(inputStream);
