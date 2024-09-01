@@ -4,16 +4,21 @@ package com.utar.plantogo.example.nearbysearch;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.utar.plantogo.internal.APIRequest;
+import com.utar.plantogo.internal.tripadvisor.model.Location;
+import com.utar.plantogo.internal.tripadvisor.model.NearbyLocation;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -31,10 +36,10 @@ public class NearbySearchExample {
         this.context = context;
     }
 
-    public Future<Map<String, Object>> loadExampleResponse() {
+    public Future<List<Location>> loadExampleResponse() {
         String fileName = "nearbyLocationSearch.json";
 
-        Callable<Map<String, Object>> callable = () -> {
+        Callable<List<Location>> callable = () -> {
             try {
                 // Simulate network delay
                 TimeUnit.SECONDS.sleep(2); // 2 seconds delay
@@ -43,20 +48,16 @@ public class NearbySearchExample {
                 // Load the JSON file from the assets directory
                 try (InputStream inputStream = context.getAssets().open(fileName);
                      BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8))) {
-
                     jsonContent = reader.lines().collect(Collectors.joining(System.lineSeparator()));
-                    Log.d("File", jsonContent);
                 }
 
-                // Parse the JSON content
-                JSONObject jsonObject = new JSONObject(jsonContent);
-                Log.d("File", jsonObject.toString());
+                Type listType = new TypeToken<List<Location>>() {}.getType();
+                List<Location> locations = new Gson().fromJson(jsonContent, listType);
 
-                // Convert the JSONObject to a Map
-                APIRequest apiRequest = new APIRequest("https://example.com"); // Dummy APIRequest for parsing
-                return apiRequest.jsonToMap(jsonObject);
+                Log.d("NearbySearch", "loadExampleResponse: " + locations);
+
+                return locations;
             } catch (Exception e) {
-                Log.e("File", "Failed to load or parse JSON", e);
                 throw new RuntimeException(e);
             }
         };
@@ -67,19 +68,5 @@ public class NearbySearchExample {
     // Ensure proper shutdown of the ExecutorService
     public void shutdown() {
         executorService.shutdown();
-    }
-
-    private String readStream(InputStream rawResponse) {
-        try {
-            ByteArrayOutputStream bo = new ByteArrayOutputStream();
-            int i = rawResponse.read();
-            while (i != -1) {
-                bo.write(i);
-                i = rawResponse.read();
-            }
-            return bo.toString();
-        } catch (IOException e) {
-            return "";
-        }
     }
 }

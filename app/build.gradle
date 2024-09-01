@@ -60,4 +60,10 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.ext.junit
     androidTestImplementation libs.espresso.core
+
+    // GSON: Google serialization / deserialization library
+    implementation libs.gson
+
+    // Glide: Media management and caching library
+    implementation libs.glide
 }
