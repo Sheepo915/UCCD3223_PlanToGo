@@ -16,6 +16,7 @@ import com.utar.plantogo.example.nearbysearch.NearbySearchExample;
 import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.internal.tripadvisor.model.NearbyLocation;
 import com.utar.plantogo.ui.carousel.CarouselAdapter;
+import com.utar.plantogo.ui.carousel.CarouselItemDecoration;
 
 import java.util.List;
 import java.util.concurrent.Future;
@@ -45,10 +46,6 @@ public class HomeFragment extends Fragment {
         carouselContainer = view.findViewById(R.id.fl_carousel_container);
         carouselRecyclerView = new RecyclerView(requireContext());
 
-        // Create Skeleton UI for carousel
-//        View skeletonView = inflater.inflate(R.layout.carousel_skeleton, container, false);
-//        carouselContainer.addView(skeletonView);
-
         // Create an instance of NearbySearchExample
         NearbySearchExample example = new NearbySearchExample(getContext());
         Future<List<Location>> futureNearbyLocations = example.loadExampleResponse();
@@ -60,7 +57,6 @@ public class HomeFragment extends Fragment {
                 List<Location> nearbyLocations = futureNearbyLocations.get();
 
                 requireActivity().runOnUiThread(() -> {
-//                    carouselContainer.removeView(skeletonView);
 
                     setupCarousel(nearbyLocations);
                 });
@@ -78,6 +74,13 @@ public class HomeFragment extends Fragment {
         carouselRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         CarouselAdapter adapter = new CarouselAdapter(getContext(), data);
         carouselRecyclerView.setAdapter(adapter);
+
+        // Define margins and spacing
+        int startMargin = (int) (14 * getResources().getDisplayMetrics().density);
+        int endMargin = (int) (14 * getResources().getDisplayMetrics().density);
+        int itemSpacing = (int) (12 * getResources().getDisplayMetrics().density);
+
+        carouselRecyclerView.addItemDecoration(new CarouselItemDecoration(startMargin, endMargin, itemSpacing));
 
         // Add the carousel RecyclerView to the container
         carouselContainer.addView(carouselRecyclerView);

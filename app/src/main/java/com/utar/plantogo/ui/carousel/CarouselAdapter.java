@@ -31,16 +31,19 @@ public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Location location = data.get(position);
+        String attractionName = location.getName();
+        Double rating = location.getDetails().getRating();
 
         if (location.getPhotos() != null && !location.getPhotos().isEmpty()) {
             String imageUrl = location.getPhotos().get(0).getImages().getMedium().getUrl();
-            String attractionName = location.getName();
+
             holder.attractionCarouselComponent.setImage(imageUrl);
-            holder.attractionCarouselComponent.setAttractionName(attractionName);
         } else {
             holder.attractionCarouselComponent.setImage(null); // Placeholder will be shown
-            holder.attractionCarouselComponent.setAttractionName(null);
         }
+
+        holder.attractionCarouselComponent.setAttractionName(attractionName);
+        holder.attractionCarouselComponent.setRating(rating);
     }
 
     @Override

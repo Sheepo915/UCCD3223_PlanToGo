@@ -15,6 +15,7 @@ public class LocationDetails {
     private String email;
     private String phone;
     private String website;
+    private Double rating;
     private String writeReview;
     private String numReviews;
     private Map<String, Subrating> subratings;
@@ -28,6 +29,14 @@ public class LocationDetails {
     private List<Subcategory> subcategory;
     private List<TripType> tripTypes;
     private List<Award> awards;
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
 
     public Address getAddressObj() {
         return addressObj;

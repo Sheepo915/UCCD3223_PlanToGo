@@ -5,21 +5,23 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import com.utar.plantogo.internal.tripadvisor.model.Location;
+
 import java.util.Map;
 
 public class AttractionComponent extends ConstraintLayout {
 
-    private Map<String, Object> attraction;
+    private Location location;
 
     public AttractionComponent(@NonNull Context context) {
         super(context);
     }
 
-    private void setAttraction(Map<String, Object> attraction) {
-        this.attraction = attraction;
+    private void setAttraction(Location location) {
+        this.location = location;
     }
 
-    protected Map<String, Object> getAttraction() {
-        return attraction;
+    protected Location getAttraction() {
+        return location;
     }
 }

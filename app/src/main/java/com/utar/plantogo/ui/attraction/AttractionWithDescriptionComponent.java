@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 
+import com.utar.plantogo.internal.tripadvisor.model.Location;
+
 import org.w3c.dom.Text;
 
 import java.util.Map;
@@ -20,7 +22,7 @@ public class AttractionWithDescriptionComponent extends AttractionComponent {
     }
 
     private void init(Context context) {
-        Map<String, Object> attraction = super.getAttraction();
+        Location attraction = super.getAttraction();
 
         // Initializing layout parameter for the Constraint Layout
         ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(
