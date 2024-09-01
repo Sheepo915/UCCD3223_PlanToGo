@@ -8,10 +8,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
+import com.utar.plantogo.example.nearbysearch.NearbySearchExample;
 import com.utar.plantogo.ui.ProfileHeader;
 
+import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.Future;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,18 +65,43 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        // Create an instance of ProfileHeader
-        ProfileHeader profileHeader = new ProfileHeader(getContext());
+        // Create an instance of NearbySearchExample
+        NearbySearchExample example = new NearbySearchExample(getContext());
+        Future<Map<String, Object>> futureResponse = null;
+        futureResponse = example.loadExampleResponse();
 
-        // Add ProfileHeader to the view hierarchy
+        // Add TextView to the view hierarchy
         FrameLayout rootView = view.findViewById(R.id.home_fragment_container);
-        rootView.addView(profileHeader);
+        TextView textView = new TextView(view.getContext());
+        rootView.addView(textView);
+
+        // Initially set the TextView to show "Loading..."
+        textView.setText("Loading...");
+
+        // Update the TextView once the future is done
+        Future<Map<String, Object>> finalFutureResponse = futureResponse;
+        example.executorService.submit(() -> {
+            try {
+                // Get the response map, this blocks until the future is done
+                Map<String, Object> responseMap = finalFutureResponse.get();
+
+                // Update the TextView on the UI thread
+                requireActivity().runOnUiThread(() -> {
+                    textView.setText(responseMap.toString());
+                });
+
+            } catch (Exception e) {
+                // Handle any errors here, also on the UI thread
+                requireActivity().runOnUiThread(() -> {
+                    textView.setText(e.toString());
+                });
+            }
+        });
 
         return view;
     }

@@ -7,8 +7,10 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -23,21 +25,26 @@ public class APIRequest {
     private final URL url;
     private final Map<String, String> headers = new HashMap<>();
     private final ExecutorService executorService = Executors.newSingleThreadExecutor();
-
-    public interface ResponseCallback {
-        void onSuccess(Map<String, Object> responseMap);
-        void onError(Exception e);
-    }
+    private String requestMethod = "GET";
+    private String requestBody = null;
 
     public APIRequest(String urlString) throws Exception {
         Pattern urlPattern = Pattern.compile("^https://.+");
         Matcher matcher = urlPattern.matcher(urlString);
 
         if (!matcher.matches()) {
-            throw new Exception();
+            throw new Exception("Url needs to start with https://");
         } else {
             url = new URL(urlString);
         }
+    }
+
+    public void setRequestBody(String requestBody) {
+        this.requestBody = requestBody;
+    }
+
+    public void setRequestMethod(REQUEST_METHOD method) {
+        this.requestMethod = method.name();
     }
 
     public void addHeader(String key, String value) {
@@ -50,9 +57,18 @@ public class APIRequest {
 
             try {
                 httpURLConnection = (HttpURLConnection) url.openConnection();
+                httpURLConnection.setRequestMethod(requestMethod);
+                httpURLConnection.setDoOutput(true);
 
                 for (Map.Entry<String, String> header : headers.entrySet()) {
                     httpURLConnection.setRequestProperty(header.getKey(), header.getValue());
+                }
+
+                if (requestBody != null) {
+                    try (OutputStream os = httpURLConnection.getOutputStream()) {
+                        byte[] input = requestBody.getBytes(StandardCharsets.UTF_8);
+                        os.write(input, 0, input.length);
+                    }
                 }
 
                 InputStream inputStream = new BufferedInputStream(httpURLConnection.getInputStream());
@@ -110,7 +126,7 @@ public class APIRequest {
         }
     }
 
-    private Map<String, Object> jsonToMap(JSONObject jsonObject) throws Exception {
+    public Map<String, Object> jsonToMap(JSONObject jsonObject) throws Exception {
         Map<String, Object> map = new HashMap<>();
         Iterator<String> keys = jsonObject.keys();
 
@@ -146,5 +162,18 @@ public class APIRequest {
         }
 
         return map;
+    }
+
+    public interface ResponseCallback {
+        void onSuccess(Map<String, Object> responseMap);
+
+        void onError(Exception e);
+    }
+
+    public enum REQUEST_METHOD {
+        GET,
+        POST,
+        PUT,
+        DELETE
     }
 }
