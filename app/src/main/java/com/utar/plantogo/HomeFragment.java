@@ -1,108 +1,85 @@
 package com.utar.plantogo;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
-import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.gson.Gson;
 import com.utar.plantogo.example.nearbysearch.NearbySearchExample;
-import com.utar.plantogo.ui.ProfileHeader;
+import com.utar.plantogo.internal.tripadvisor.model.Location;
+import com.utar.plantogo.internal.tripadvisor.model.NearbyLocation;
+import com.utar.plantogo.ui.carousel.CarouselAdapter;
 
-import java.io.IOException;
-import java.util.Map;
-import java.util.Objects;
+import java.util.List;
 import java.util.concurrent.Future;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link HomeFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment {
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private FrameLayout carouselContainer;
+    private RecyclerView carouselRecyclerView;
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment HomeFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static HomeFragment newInstance(String param1, String param2) {
-        HomeFragment fragment = new HomeFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        // Attraction Carousel
+        carouselContainer = view.findViewById(R.id.fl_carousel_container);
+        carouselRecyclerView = new RecyclerView(requireContext());
+
+        // Create Skeleton UI for carousel
+//        View skeletonView = inflater.inflate(R.layout.carousel_skeleton, container, false);
+//        carouselContainer.addView(skeletonView);
+
         // Create an instance of NearbySearchExample
         NearbySearchExample example = new NearbySearchExample(getContext());
-        Future<Map<String, Object>> futureResponse = null;
-        futureResponse = example.loadExampleResponse();
-
-        // Add TextView to the view hierarchy
-        FrameLayout rootView = view.findViewById(R.id.home_fragment_container);
-        TextView textView = new TextView(view.getContext());
-        rootView.addView(textView);
-
-        // Initially set the TextView to show "Loading..."
-        textView.setText("Loading...");
+        Future<List<Location>> futureNearbyLocations = example.loadExampleResponse();
 
         // Update the TextView once the future is done
-        Future<Map<String, Object>> finalFutureResponse = futureResponse;
         example.executorService.submit(() -> {
             try {
                 // Get the response map, this blocks until the future is done
-                Map<String, Object> responseMap = finalFutureResponse.get();
+                List<Location> nearbyLocations = futureNearbyLocations.get();
 
-                // Update the TextView on the UI thread
                 requireActivity().runOnUiThread(() -> {
-                    textView.setText(responseMap.toString());
+//                    carouselContainer.removeView(skeletonView);
+
+                    setupCarousel(nearbyLocations);
                 });
 
             } catch (Exception e) {
-                // Handle any errors here, also on the UI thread
-                requireActivity().runOnUiThread(() -> {
-                    textView.setText(e.toString());
-                });
+                e.printStackTrace();
             }
         });
 
         return view;
+    }
+
+    private void setupCarousel(List<Location> data) {
+        // Initialize and set up the carousel RecyclerView
+        carouselRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        CarouselAdapter adapter = new CarouselAdapter(getContext(), data);
+        carouselRecyclerView.setAdapter(adapter);
+
+        // Add the carousel RecyclerView to the container
+        carouselContainer.addView(carouselRecyclerView);
     }
 }
