@@ -10,24 +10,21 @@ import androidx.annotation.NonNull;
 import com.bumptech.glide.Glide;
 import com.utar.plantogo.R;
 
-public class AttractionCarouselComponent extends AttractionComponent {
-    private ImageView attractionShowcaseImage;
-    private TextView attractionName;
-    private TextView rating;
+public class AttractionListComponent extends AttractionComponent {
+    ImageView attractionShowcaseImage;
+    TextView attractionName, rating;
 
-    public AttractionCarouselComponent(@NonNull Context context) {
+    public AttractionListComponent(@NonNull Context context) {
         super(context);
         init(context);
     }
 
-    private void init(@NonNull Context context) {
-        // Inflate the XML layout
-        inflate(context, R.layout.component_attraction_carousel, this);
+    private void init(Context context) {
+        inflate(context, R.layout.component_attraction_list, this);
 
-        // Find views
-        attractionShowcaseImage = findViewById(R.id.attractionShowcaseImage);
-        attractionName = findViewById(R.id.attractionName);
-        rating = findViewById(R.id.rating);
+        attractionShowcaseImage = findViewById(R.id.iv_attraction_list_img);
+        attractionName = findViewById(R.id.tv_attraction_list_name);
+        rating = findViewById(R.id.tv_attraction_list_rating);
     }
 
     public void setImage(String imageUrl) {
@@ -51,9 +48,5 @@ public class AttractionCarouselComponent extends AttractionComponent {
         if (rating != null) {
             this.rating.setText(rating.toString());
         }
-    }
-
-    private int dpToPx(int dp) {
-        return Math.round(dp * getResources().getDisplayMetrics().density);
     }
 }

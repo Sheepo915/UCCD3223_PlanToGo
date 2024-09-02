@@ -60,13 +60,13 @@ public class MainActivity extends AppCompatActivity {
             int itemId = item.getItemId();
 
             if (itemId == R.id.nav_home) {
-                navigateToFragment(new HomeFragment(), true, false);
+                navigateToFragment(new HomeFragment(), true, true);
                 return true;
             } else if (itemId == R.id.nav_planner) {
-                navigateToFragment(new PlannerFragment(), true, false);
+                navigateToFragment(new PlannerFragment(), true, true);
                 return true;
             } else if (itemId == R.id.nav_setting) {
-                navigateToFragment(new SettingFragment(), true, false);
+                navigateToFragment(new SettingFragment(), true, true);
                 return true;
             }
 

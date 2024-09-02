@@ -4,8 +4,6 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import java.util.Dictionary;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -34,7 +32,7 @@ public class AttractionComponentFactory {
 
         switch (type) {
             case LIST_ITEM:
-                component = new AttractionWithDescriptionComponent(context);
+                component = new AttractionListComponent(context);
                 break;
             case CAROUSEL_ITEM:
                 component = new AttractionCarouselComponent(context);
