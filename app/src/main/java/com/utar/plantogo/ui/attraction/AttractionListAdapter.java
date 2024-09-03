@@ -39,17 +39,7 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Location location = data.get(position);
 
-        // Set the image, name, and rating for each item
-        if (location.getPhotos() != null && !location.getPhotos().isEmpty()) {
-            String imageUrl = location.getPhotos().get(0).getImages().getMedium().getUrl();
-
-            holder.component.setImage(imageUrl);
-        } else {
-            holder.component.setImage(null); // Placeholder will be shown
-        }
-
-        holder.component.setAttractionName(location.getName());
-        holder.component.setRating((double) location.getDetails().getRating());
+        holder.attractionListComponent.setAttraction(location);
     }
 
     @Override
@@ -58,11 +48,11 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        AttractionListComponent component;
+        AttractionListComponent attractionListComponent;
 
         public ViewHolder(@NonNull AttractionListComponent itemView) {
             super(itemView);
-            component = itemView;
+            attractionListComponent = itemView;
         }
     }
 }

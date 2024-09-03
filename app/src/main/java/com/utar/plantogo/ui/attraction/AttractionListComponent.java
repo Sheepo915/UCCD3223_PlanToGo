@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.utar.plantogo.R;
+import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 public class AttractionListComponent extends AttractionComponent {
@@ -27,6 +28,22 @@ public class AttractionListComponent extends AttractionComponent {
         attractionShowcaseImage = findViewById(R.id.iv_attraction_list_img);
         attractionName = findViewById(R.id.tv_attraction_list_name);
         rating = findViewById(R.id.tv_attraction_list_rating);
+    }
+
+    @Override
+    public void setAttraction(Location location) {
+        super.setAttraction(location);
+
+        if (location != null) {
+            setAttractionName(location.getName());
+            setRating((double) location.getDetails().getRating());
+
+            String imageUrl = null;
+            if (location.getPhotos() != null && !location.getPhotos().isEmpty()) {
+                imageUrl = location.getPhotos().get(0).getImages().getMedium().getUrl();
+            }
+            setImage(imageUrl);
+        }
     }
 
     public void setImage(String imageUrl) {

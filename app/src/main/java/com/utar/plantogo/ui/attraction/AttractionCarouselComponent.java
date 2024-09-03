@@ -29,8 +29,8 @@ public class AttractionCarouselComponent extends AttractionComponent {
 
         // Find views
         attractionShowcaseImage = findViewById(R.id.iv_attraction_img);
-        attractionName = findViewById(R.id.attractionName);
-        rating = findViewById(R.id.rating);
+        attractionName = findViewById(R.id.tv_attraction_name);
+        rating = findViewById(R.id.tv_rating);
     }
 
     @Override
