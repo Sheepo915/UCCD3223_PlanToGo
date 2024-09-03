@@ -5,8 +5,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.SearchView;
 
+import androidx.activity.OnBackPressedCallback;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +22,7 @@ import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.ui.attraction.AttractionListAdapter;
 import com.utar.plantogo.ui.carousel.CarouselAdapter;
 import com.utar.plantogo.ui.RecyclerViewItemDecoration;
+import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 import java.util.List;
 import java.util.concurrent.Future;
@@ -27,6 +34,8 @@ import java.util.concurrent.Future;
 public class HomeFragment extends Fragment {
     private FrameLayout carouselContainer;
     private RecyclerView carouselRecyclerView, attractionListRecyclerView;
+    private SearchView searchView;
+    private FragmentViewModel fragmentViewModel;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -40,6 +49,27 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        View searchViewLayout = inflater.inflate(R.layout.component_search, container, false);
+        searchView = searchViewLayout.findViewById(R.id.sv_attraction_search);
+
+        // Find the container in fragment_home where you want to add the searchViewLayout
+        FrameLayout searchContainer = view.findViewById(R.id.fl_search_container);
+        searchContainer.addView(searchViewLayout);
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                navigateToSearchFragment(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         // Attraction Carousel
         carouselContainer = view.findViewById(R.id.fl_carousel_container);
@@ -56,9 +86,12 @@ public class HomeFragment extends Fragment {
             try {
                 List<Location> nearbyLocations = futureNearbyLocations.get();
 
+                fragmentViewModel = new ViewModelProvider(requireActivity()).get(FragmentViewModel.class);
+                fragmentViewModel.setPreloadData(nearbyLocations);
+
                 requireActivity().runOnUiThread(() -> {
                     setupCarousel(nearbyLocations);
-                    setupRecyclerView(nearbyLocations);
+                    setupAttractionList(nearbyLocations);
                 });
             } catch (Exception e) {
                 e.printStackTrace();
@@ -81,11 +114,16 @@ public class HomeFragment extends Fragment {
 
         carouselRecyclerView.addItemDecoration(new RecyclerViewItemDecoration(startMargin, endMargin, itemSpacing, RecyclerViewItemDecoration.Direction.HORIZONTAL));
 
+        // Ensure carouselRecyclerView does not have a parent before adding it
+        if (carouselRecyclerView.getParent() != null) {
+            ((ViewGroup) carouselRecyclerView.getParent()).removeView(carouselRecyclerView);
+        }
+
         // Add the carousel RecyclerView to the container
         carouselContainer.addView(carouselRecyclerView);
     }
 
-    private void setupRecyclerView(List<Location> data) {
+    private void setupAttractionList(List<Location> data) {
         // Set the LayoutManager
         attractionListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -98,4 +136,12 @@ public class HomeFragment extends Fragment {
         attractionListRecyclerView.addItemDecoration(new RecyclerViewItemDecoration(0, 0, itemSpacing, RecyclerViewItemDecoration.Direction.VERTICAL));
     }
 
+    private void navigateToSearchFragment(String searchQuery) {
+        // Navigate to the SearchFragment
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.fragment_container, SearchFragment.newInstance(searchQuery));
+        transaction.addToBackStack(null);
+        // Commit the transaction
+        transaction.commit();
+    }
 }

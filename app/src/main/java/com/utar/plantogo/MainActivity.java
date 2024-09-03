@@ -1,15 +1,19 @@
 package com.utar.plantogo;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 import java.util.Objects;
 
@@ -38,38 +42,47 @@ public class MainActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private BottomNavigationView bottomNavigationView;
     private OnBackPressedCallback onBackPressedCallback;
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private Runnable updateBottomNavRunnable;
+    private FragmentViewModel fragmentViewModel = new FragmentViewModel();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Refers to the appbar at the top
+        // Initialize Toolbar and BottomNavigationView
         toolbar = findViewById(R.id.toolbar);
-        // The bottom navigation bar that connect three main fragments
-        // - HomeFragment
-        // - PlannerFragment
-        // - SettingFragment
         bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
 
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
 
-        // Binding three main fragment into the Bottom Navigation Bar
+        View profileHeaderContainer = findViewById(R.id.cl_profile_header_container);
+
+        // Set BottomNavigationView listener
         bottomNavigationView.setOnItemSelectedListener(item -> {
             int itemId = item.getItemId();
 
             if (itemId == R.id.nav_home) {
-                navigateToFragment(new HomeFragment(), true, true);
+                navigateToFragment(new HomeFragment(), true, true, true);
+                if (profileHeaderContainer != null) {
+                    profileHeaderContainer.setVisibility(View.VISIBLE);
+                }
                 return true;
             } else if (itemId == R.id.nav_planner) {
-                navigateToFragment(new PlannerFragment(), true, true);
+                navigateToFragment(new PlannerFragment(), true, true, false);
+                if (profileHeaderContainer != null) {
+                    profileHeaderContainer.setVisibility(View.GONE);
+                }
                 return true;
             } else if (itemId == R.id.nav_setting) {
-                navigateToFragment(new SettingFragment(), true, true);
+                navigateToFragment(new SettingFragment(), true, true, false);
+                if (profileHeaderContainer != null) {
+                    profileHeaderContainer.setVisibility(View.GONE);
+                }
                 return true;
             }
-
             return false;
         });
 
@@ -83,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
             public void handleOnBackPressed() {
                 if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
                     getSupportFragmentManager().popBackStack();
+                    updateBottomNavigationView();
                 } else {
                     finish();
                 }
@@ -92,15 +106,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * This is a wrapper for navigation between fragment
-     * @param fragment Fragment that will be navigated to
+     * This is a wrapper for navigation between fragments
+     *
+     * @param fragment      Fragment that will be navigated to
      * @param showBottomNav Configuration for enabling Bottom Navigation Bar
      * @param showActionBar Configuration for enabling Top App Bar
-     * */
-    public void navigateToFragment(Fragment fragment, boolean showBottomNav, boolean showActionBar) {
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+     */
+    public void navigateToFragment(Fragment fragment, boolean showBottomNav, boolean showActionBar, boolean isRoot) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+
+        if (currentFragment != null && currentFragment.getClass().equals(fragment.getClass())) {
+            // If the current fragment is the same as the new one, no need to navigate
+            return;
+        }
         transaction.replace(R.id.fragment_container, fragment);
-        transaction.addToBackStack(null);
+
+        if (isRoot) {
+            // Clear the back stack if this is the root fragment
+            Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(false);
+            getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        } else {
+            // Add the transaction to the back stack
+            Objects.requireNonNull(getSupportActionBar()).setDisplayShowTitleEnabled(true);
+            transaction.addToBackStack(null);
+        }
+
         transaction.commit();
 
         if (showBottomNav) {
@@ -111,8 +143,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (showActionBar) {
             toolbar.setVisibility(View.VISIBLE);
-            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+            Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(!isRoot);
             toolbar.setNavigationOnClickListener(v -> {
+                if (isRoot) {
+                    return;
+                }
                 if (onBackPressedCallback.isEnabled()) {
                     onBackPressedCallback.handleOnBackPressed();
                 }
@@ -120,6 +155,30 @@ public class MainActivity extends AppCompatActivity {
         } else {
             toolbar.setVisibility(View.GONE);
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
+            Objects.requireNonNull(getSupportActionBar()).setTitle(null);
         }
+
+        debounceUpdateBottomNavigationView(); // Ensure this is called after navigation
+    }
+
+    private void updateBottomNavigationView() {
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+
+        if (currentFragment instanceof HomeFragment) {
+            bottomNavigationView.setSelectedItemId(R.id.nav_home);
+        } else if (currentFragment instanceof PlannerFragment) {
+            bottomNavigationView.setSelectedItemId(R.id.nav_planner);
+        } else if (currentFragment instanceof SettingFragment) {
+            bottomNavigationView.setSelectedItemId(R.id.nav_setting);
+        }
+    }
+
+    private void debounceUpdateBottomNavigationView() {
+        if (updateBottomNavRunnable != null) {
+            handler.removeCallbacks(updateBottomNavRunnable);
+        }
+
+        updateBottomNavRunnable = this::updateBottomNavigationView;
+        handler.postDelayed(updateBottomNavRunnable, 100); // Delay in milliseconds
     }
 }
