@@ -1,9 +1,17 @@
 package com.utar.plantogo;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.TextView;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
@@ -11,7 +19,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
@@ -46,17 +53,17 @@ public class MainActivity extends AppCompatActivity {
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable updateBottomNavRunnable;
     private FragmentViewModel fragmentViewModel;
+    private TextView LoginText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragmentViewModel = new ViewModelProvider(this).get(FragmentViewModel.class);
-
         // Initialize Toolbar and BottomNavigationView
         toolbar = findViewById(R.id.toolbar);
         bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
+        LoginText = findViewById(R.id.tv_profile_header_action_text);
 
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
@@ -93,6 +100,13 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.setSelectedItemId(R.id.nav_home);
         }
 
+        LoginText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showBottomDialog();
+            }
+        });
+
         // Register the OnBackPressedCallback for handling Back Button
         onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
@@ -108,10 +122,6 @@ public class MainActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
     }
 
-    public FragmentViewModel getFragmentViewModel() {
-        return fragmentViewModel;
-    }
-
     /**
      * This is a wrapper for navigation between fragments
      *
@@ -122,13 +132,13 @@ public class MainActivity extends AppCompatActivity {
     public void navigateToFragment(Fragment fragment, boolean showBottomNav, boolean showActionBar, boolean isRoot) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        Fragment currentFragment = fragmentManager.findFragmentById(R.id.root_fragment_container);
+        Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
 
         if (currentFragment != null && currentFragment.getClass().equals(fragment.getClass())) {
             // If the current fragment is the same as the new one, no need to navigate
             return;
         }
-        transaction.replace(R.id.root_fragment_container, fragment);
+        transaction.replace(R.id.fragment_container, fragment);
 
         if (isRoot) {
             // Clear the back stack if this is the root fragment
@@ -169,7 +179,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateBottomNavigationView() {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.root_fragment_container);
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
 
         if (currentFragment instanceof HomeFragment) {
             bottomNavigationView.setSelectedItemId(R.id.nav_home);
@@ -187,5 +197,20 @@ public class MainActivity extends AppCompatActivity {
 
         updateBottomNavRunnable = this::updateBottomNavigationView;
         handler.postDelayed(updateBottomNavRunnable, 100); // Delay in milliseconds
+    }
+
+    private void showBottomDialog(){
+        final Dialog dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.bottomsheetlayout);
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+
+
     }
 }
