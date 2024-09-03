@@ -14,7 +14,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/attractionName"
+        android:id="@+id/tv_attraction_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -22,11 +22,11 @@
         app:layout_constraintTop_toBottomOf="@id/iv_attraction_img" />
 
     <TextView
-        android:id="@+id/rating"
+        android:id="@+id/tv_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/attractionName" />
+        app:layout_constraintTop_toBottomOf="@id/tv_attraction_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
