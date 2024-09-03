@@ -5,7 +5,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/attractionShowcaseImage"
+        android:id="@+id/iv_attraction_img"
         android:layout_width="0dp"
         android:layout_height="160dp"
         android:background="@drawable/rounded_rect"
@@ -18,16 +18,14 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Attraction Name"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/attractionShowcaseImage" />
+        app:layout_constraintTop_toBottomOf="@id/iv_attraction_img" />
 
     <TextView
         android:id="@+id/rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Rating"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/attractionName" />
 

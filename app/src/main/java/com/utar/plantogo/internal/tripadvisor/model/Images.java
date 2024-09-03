@@ -47,4 +47,24 @@ public class Images {
     public void setOriginal(Image original) {
         this.original = original;
     }
+
+    /**
+     * Get the first available image from the specified sizes in order of preference.
+     *
+     * @return The URL of the first available image, or null if none are available.
+     */
+    public Image getFallbackImage() {
+        if (original != null) {
+            return original;
+        } else if (large != null) {
+            return large;
+        } else if (medium != null) {
+            return medium;
+        } else if (small != null) {
+            return small;
+        } else if (thumbnail != null) {
+            return thumbnail;
+        }
+        return null; // Return null if no image is available
+    }
 }

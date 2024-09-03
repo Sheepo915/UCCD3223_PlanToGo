@@ -25,10 +25,10 @@ public class AttractionCarouselComponent extends AttractionComponent {
 
     private void init(@NonNull Context context) {
         // Inflate the XML layout
-        inflate(context, R.layout.component_attraction_carousel, this);
+        inflate(context, R.layout.component_attraction_carousel_list, this);
 
         // Find views
-        attractionShowcaseImage = findViewById(R.id.attractionShowcaseImage);
+        attractionShowcaseImage = findViewById(R.id.iv_attraction_img);
         attractionName = findViewById(R.id.attractionName);
         rating = findViewById(R.id.rating);
     }
