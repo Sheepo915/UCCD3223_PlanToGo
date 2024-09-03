@@ -6,17 +6,20 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.utar.plantogo.R;
+import com.utar.plantogo.internal.tripadvisor.model.Location;
+import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 public class AttractionCarouselComponent extends AttractionComponent {
     private ImageView attractionShowcaseImage;
     private TextView attractionName;
     private TextView rating;
 
-    public AttractionCarouselComponent(@NonNull Context context) {
-        super(context);
+    public AttractionCarouselComponent(@NonNull Context context, FragmentManager fragmentManager, FragmentViewModel fragmentViewModel) {
+        super(context, fragmentManager, fragmentViewModel);
         init(context);
     }
 
@@ -28,6 +31,22 @@ public class AttractionCarouselComponent extends AttractionComponent {
         attractionShowcaseImage = findViewById(R.id.attractionShowcaseImage);
         attractionName = findViewById(R.id.attractionName);
         rating = findViewById(R.id.rating);
+    }
+
+    @Override
+    public void setAttraction(Location location) {
+        super.setAttraction(location);
+
+        if (location != null) {
+            setAttractionName(location.getName());
+            setRating((double) location.getDetails().getRating());
+
+            String imageUrl = null;
+            if (location.getPhotos() != null && !location.getPhotos().isEmpty()) {
+                imageUrl = location.getPhotos().get(0).getImages().getMedium().getUrl();
+            }
+            setImage(imageUrl);
+        }
     }
 
     public void setImage(String imageUrl) {
@@ -51,9 +70,5 @@ public class AttractionCarouselComponent extends AttractionComponent {
         if (rating != null) {
             this.rating.setText(rating.toString());
         }
-    }
-
-    private int dpToPx(int dp) {
-        return Math.round(dp * getResources().getDisplayMetrics().density);
     }
 }

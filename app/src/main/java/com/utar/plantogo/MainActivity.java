@@ -11,6 +11,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
@@ -44,12 +45,14 @@ public class MainActivity extends AppCompatActivity {
     private OnBackPressedCallback onBackPressedCallback;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable updateBottomNavRunnable;
-    private FragmentViewModel fragmentViewModel = new FragmentViewModel();
+    private FragmentViewModel fragmentViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        fragmentViewModel = new ViewModelProvider(this).get(FragmentViewModel.class);
 
         // Initialize Toolbar and BottomNavigationView
         toolbar = findViewById(R.id.toolbar);
@@ -105,6 +108,10 @@ public class MainActivity extends AppCompatActivity {
         getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
     }
 
+    public FragmentViewModel getFragmentViewModel() {
+        return fragmentViewModel;
+    }
+
     /**
      * This is a wrapper for navigation between fragments
      *
@@ -115,13 +122,13 @@ public class MainActivity extends AppCompatActivity {
     public void navigateToFragment(Fragment fragment, boolean showBottomNav, boolean showActionBar, boolean isRoot) {
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        Fragment currentFragment = fragmentManager.findFragmentById(R.id.fragment_container);
+        Fragment currentFragment = fragmentManager.findFragmentById(R.id.root_fragment_container);
 
         if (currentFragment != null && currentFragment.getClass().equals(fragment.getClass())) {
             // If the current fragment is the same as the new one, no need to navigate
             return;
         }
-        transaction.replace(R.id.fragment_container, fragment);
+        transaction.replace(R.id.root_fragment_container, fragment);
 
         if (isRoot) {
             // Clear the back stack if this is the root fragment
@@ -162,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateBottomNavigationView() {
-        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.root_fragment_container);
 
         if (currentFragment instanceof HomeFragment) {
             bottomNavigationView.setSelectedItemId(R.id.nav_home);

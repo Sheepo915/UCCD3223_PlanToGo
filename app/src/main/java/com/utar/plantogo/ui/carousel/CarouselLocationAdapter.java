@@ -4,46 +4,41 @@ import android.content.Context;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.ui.attraction.AttractionCarouselComponent;
+import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 import java.util.List;
 
-public class CarouselAdapter extends RecyclerView.Adapter<CarouselAdapter.ViewHolder> {
+public class CarouselLocationAdapter extends RecyclerView.Adapter<CarouselLocationAdapter.ViewHolder> {
 
     private final Context context;
     private final List<Location> data;
+    private final FragmentManager fragmentManager;
+    private final FragmentViewModel fragmentViewModel;
 
-    public CarouselAdapter(Context context, List<Location> data) {
+    public CarouselLocationAdapter(Context context, List<Location> data, FragmentManager fragmentManager,FragmentViewModel fragmentViewModel) {
         this.context = context;
         this.data = data;
+        this.fragmentManager = fragmentManager;
+        this.fragmentViewModel = fragmentViewModel;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        AttractionCarouselComponent attractionCarouselComponent = new AttractionCarouselComponent(context);
+        AttractionCarouselComponent attractionCarouselComponent = new AttractionCarouselComponent(context, fragmentManager, fragmentViewModel);
         return new ViewHolder(attractionCarouselComponent);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Location location = data.get(position);
-        String attractionName = location.getName();
-        Double rating = location.getDetails().getRating();
 
-        if (location.getPhotos() != null && !location.getPhotos().isEmpty()) {
-            String imageUrl = location.getPhotos().get(0).getImages().getMedium().getUrl();
-
-            holder.attractionCarouselComponent.setImage(imageUrl);
-        } else {
-            holder.attractionCarouselComponent.setImage(null); // Placeholder will be shown
-        }
-
-        holder.attractionCarouselComponent.setAttractionName(attractionName);
-        holder.attractionCarouselComponent.setRating(rating);
+        holder.attractionCarouselComponent.setAttraction(location);
     }
 
     @Override
