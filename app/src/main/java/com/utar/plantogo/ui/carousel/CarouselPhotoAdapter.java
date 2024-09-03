@@ -37,7 +37,7 @@ public class CarouselPhotoAdapter extends RecyclerView.Adapter<CarouselPhotoAdap
     @Override
     public void onBindViewHolder(@NonNull CarouselPhotoAdapter.ViewHolder holder, int position) {
         Photo photo = data.get(position);
-        Image image = photo.getImages().getOriginal();
+        Image image = photo.getImages().getFallbackImage();
 
         if (!data.isEmpty()) {
             String imageUrl = image.getUrl();
