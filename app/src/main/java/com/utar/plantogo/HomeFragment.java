@@ -75,6 +75,7 @@ public class HomeFragment extends Fragment {
         carouselContainer = view.findViewById(R.id.fl_carousel_container);
         carouselRecyclerView = new RecyclerView(requireContext());
 
+        // Attraction Recycler View
         attractionListRecyclerView = view.findViewById(R.id.rv_attraction_list);
 
         // Create an instance of NearbySearchExample

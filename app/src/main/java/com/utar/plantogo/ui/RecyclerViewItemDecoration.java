@@ -2,6 +2,7 @@ package com.utar.plantogo.ui;
 
 import android.graphics.Rect;
 import android.view.View;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,7 +36,7 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
             outRect.top = 0;
             outRect.bottom = 0;
         } else if (direction == Direction.VERTICAL) {
-            if (position == state.getItemCount() - 1) {
+            if (endMargin == 0 && position == state.getItemCount() - 1) {
                 outRect.bottom = 0;
             } else {
                 outRect.bottom = itemSpacing;
@@ -45,7 +46,6 @@ public class RecyclerViewItemDecoration extends RecyclerView.ItemDecoration {
     }
 
     public enum Direction {
-        HORIZONTAL,
-        VERTICAL
+        HORIZONTAL, VERTICAL
     }
 }

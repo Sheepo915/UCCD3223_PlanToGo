@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -14,6 +16,8 @@ import android.view.ViewGroup;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.utar.plantogo.internal.tripadvisor.model.Location;
+import com.utar.plantogo.ui.RecyclerViewItemDecoration;
+import com.utar.plantogo.ui.attraction.AttractionListAdapter;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 import java.util.ArrayList;
@@ -35,7 +39,9 @@ public class SearchFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String searchQuery;
     private List<Location> preloadData;
+
     private FragmentViewModel fragmentViewModel;
+    private RecyclerView attractionListRecyclerView;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -75,6 +81,10 @@ public class SearchFragment extends Fragment {
         fragmentViewModel = new ViewModelProvider(requireActivity()).get(FragmentViewModel.class);
         preloadData = fragmentViewModel.getPreloadData();
 
+        attractionListRecyclerView = view.findViewById(R.id.rv_attraction_list);
+
+        setupAttractionList(preloadData);
+
         configureToolbarForSearchFragment();
         configureBottomNavigationBarVisibility(false);
 
@@ -86,6 +96,20 @@ public class SearchFragment extends Fragment {
         super.onDestroyView();
         configureBottomNavigationBarVisibility(true);
         configureToolbarOnDestroy();
+    }
+
+    private void setupAttractionList(List<Location> data) {
+        // Set the LayoutManager
+        attractionListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Create and set the adapter
+        AttractionListAdapter adapter = new AttractionListAdapter(getContext(), data);
+        attractionListRecyclerView.setAdapter(adapter);
+
+        int itemSpacing = (int) (12 * getResources().getDisplayMetrics().density);
+        int marginEnd = (int) (10 * getResources().getDisplayMetrics().density);
+
+        attractionListRecyclerView.addItemDecoration(new RecyclerViewItemDecoration(0, marginEnd, itemSpacing, RecyclerViewItemDecoration.Direction.VERTICAL));
     }
 
     /**
