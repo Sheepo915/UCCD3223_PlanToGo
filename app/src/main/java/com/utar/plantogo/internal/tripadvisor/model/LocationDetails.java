@@ -15,7 +15,7 @@ public class LocationDetails {
     private String email;
     private String phone;
     private String website;
-    private Double rating;
+    private float rating;
     private String writeReview;
     private String numReviews;
     private Map<String, Subrating> subratings;
@@ -30,11 +30,11 @@ public class LocationDetails {
     private List<TripType> tripTypes;
     private List<Award> awards;
 
-    public Double getRating() {
+    public float getRating() {
         return rating;
     }
 
-    public void setRating(Double rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 

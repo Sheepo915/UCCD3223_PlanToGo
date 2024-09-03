@@ -7,20 +7,16 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
 
-import androidx.activity.OnBackPressedCallback;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.utar.plantogo.example.nearbysearch.NearbySearchExample;
 import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.ui.attraction.AttractionListAdapter;
-import com.utar.plantogo.ui.carousel.CarouselAdapter;
+import com.utar.plantogo.ui.carousel.CarouselLocationAdapter;
 import com.utar.plantogo.ui.RecyclerViewItemDecoration;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
@@ -34,7 +30,6 @@ import java.util.concurrent.Future;
 public class HomeFragment extends Fragment {
     private FrameLayout carouselContainer;
     private RecyclerView carouselRecyclerView, attractionListRecyclerView;
-    private SearchView searchView;
     private FragmentViewModel fragmentViewModel;
 
     public HomeFragment() {
@@ -44,6 +39,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        fragmentViewModel = new ViewModelProvider(requireActivity()).get(FragmentViewModel.class);
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,7 +47,7 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
         View searchViewLayout = inflater.inflate(R.layout.component_search, container, false);
-        searchView = searchViewLayout.findViewById(R.id.sv_attraction_search);
+        SearchView searchView = searchViewLayout.findViewById(R.id.sv_attraction_search);
 
         // Find the container in fragment_home where you want to add the searchViewLayout
         FrameLayout searchContainer = view.findViewById(R.id.fl_search_container);
@@ -87,7 +83,6 @@ public class HomeFragment extends Fragment {
             try {
                 List<Location> nearbyLocations = futureNearbyLocations.get();
 
-                fragmentViewModel = new ViewModelProvider(requireActivity()).get(FragmentViewModel.class);
                 fragmentViewModel.setPreloadData(nearbyLocations);
 
                 requireActivity().runOnUiThread(() -> {
@@ -105,7 +100,7 @@ public class HomeFragment extends Fragment {
     private void setupCarousel(List<Location> data) {
         // Initialize and set up the carousel RecyclerView
         carouselRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        CarouselAdapter adapter = new CarouselAdapter(getContext(), data);
+        CarouselLocationAdapter adapter = new CarouselLocationAdapter(getContext(), data, getParentFragmentManager(), fragmentViewModel);
         carouselRecyclerView.setAdapter(adapter);
 
         // Define margins and spacing
@@ -129,7 +124,7 @@ public class HomeFragment extends Fragment {
         attractionListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Create and set the adapter
-        AttractionListAdapter adapter = new AttractionListAdapter(getContext(), data);
+        AttractionListAdapter adapter = new AttractionListAdapter(getContext(), data, getParentFragmentManager(), fragmentViewModel);
         attractionListRecyclerView.setAdapter(adapter);
 
         int itemSpacing = (int) (12 * getResources().getDisplayMetrics().density);
@@ -140,7 +135,7 @@ public class HomeFragment extends Fragment {
     private void navigateToSearchFragment(String searchQuery) {
         // Navigate to the SearchFragment
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, SearchFragment.newInstance(searchQuery));
+        transaction.replace(R.id.root_fragment_container, SearchFragment.newInstance(searchQuery));
         transaction.addToBackStack(null);
         // Commit the transaction
         transaction.commit();

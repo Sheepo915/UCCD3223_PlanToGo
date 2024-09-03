@@ -6,16 +6,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 
 import com.bumptech.glide.Glide;
 import com.utar.plantogo.R;
+import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 public class AttractionListComponent extends AttractionComponent {
     ImageView attractionShowcaseImage;
     TextView attractionName, rating;
 
-    public AttractionListComponent(@NonNull Context context) {
-        super(context);
+    public AttractionListComponent(@NonNull Context context, FragmentManager fragmentManager, FragmentViewModel fragmentViewModel) {
+        super(context, fragmentManager, fragmentViewModel);
         init(context);
     }
 

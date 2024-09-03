@@ -69,6 +69,7 @@ public class SearchFragment extends Fragment {
         if (getArguments() != null) {
             searchQuery = getArguments().getString(SEARCH_QUERY);
         }
+        fragmentViewModel = new ViewModelProvider(requireActivity()).get(FragmentViewModel.class);
     }
 
     @Override
@@ -78,7 +79,6 @@ public class SearchFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
         // Get the data from view model
-        fragmentViewModel = new ViewModelProvider(requireActivity()).get(FragmentViewModel.class);
         preloadData = fragmentViewModel.getPreloadData();
 
         attractionListRecyclerView = view.findViewById(R.id.rv_attraction_list);
@@ -103,7 +103,7 @@ public class SearchFragment extends Fragment {
         attractionListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Create and set the adapter
-        AttractionListAdapter adapter = new AttractionListAdapter(getContext(), data);
+        AttractionListAdapter adapter = new AttractionListAdapter(getContext(), data, getParentFragmentManager(), fragmentViewModel);
         attractionListRecyclerView.setAdapter(adapter);
 
         int itemSpacing = (int) (12 * getResources().getDisplayMetrics().density);

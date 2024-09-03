@@ -4,9 +4,11 @@ import android.content.Context;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.utar.plantogo.internal.tripadvisor.model.Location;
+import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 import java.util.List;
 
@@ -15,17 +17,21 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
 
     private final Context context;
     private final List<Location> data;
+    private final FragmentManager fragmentManager;
+    private final FragmentViewModel fragmentViewModel;
 
-    public AttractionListAdapter(Context context, List<Location> data) {
+    public AttractionListAdapter(Context context, List<Location> data, FragmentManager fragmentManager, FragmentViewModel fragmentViewModel) {
         this.context = context;
         this.data = data;
+        this.fragmentManager = fragmentManager;
+        this.fragmentViewModel = fragmentViewModel;
     }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate the custom view for each item
-        AttractionListComponent view = new AttractionListComponent(context);
+        AttractionListComponent view = new AttractionListComponent(context, fragmentManager, fragmentViewModel);
         return new ViewHolder(view);
     }
 
@@ -43,7 +49,7 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
         }
 
         holder.component.setAttractionName(location.getName());
-        holder.component.setRating(location.getDetails().getRating());
+        holder.component.setRating((double) location.getDetails().getRating());
     }
 
     @Override
