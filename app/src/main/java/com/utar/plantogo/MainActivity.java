@@ -46,10 +46,10 @@ import java.util.Objects;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private Toolbar toolbar;
     private BottomNavigationView bottomNavigationView;
     private OnBackPressedCallback onBackPressedCallback;
-    private final Handler handler = new Handler(Looper.getMainLooper());
     private Runnable updateBottomNavRunnable;
     private FragmentViewModel fragmentViewModel;
     private TextView LoginText;
@@ -99,6 +99,28 @@ public class MainActivity extends AppCompatActivity {
             bottomNavigationView.setSelectedItemId(R.id.nav_home);
         }
 
+
+        getSupportFragmentManager().addOnBackStackChangedListener(() -> {
+            Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.root_fragment_container);
+
+            if (currentFragment instanceof AttractionFragment) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                bottomNavigationView.setVisibility(View.GONE);
+                profileHeaderContainer.setVisibility(View.GONE);
+            } else if (currentFragment instanceof SearchFragment) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                bottomNavigationView.setVisibility(View.GONE);
+                profileHeaderContainer.setVisibility(View.GONE);
+            } else if (currentFragment instanceof HomeFragment) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                bottomNavigationView.setVisibility(View.VISIBLE);
+                profileHeaderContainer.setVisibility(View.VISIBLE);
+            } else {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+                bottomNavigationView.setVisibility(View.VISIBLE);
+            }
+        });
+
         LoginText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,7 +141,16 @@ public class MainActivity extends AppCompatActivity {
             }
         };
         getOnBackPressedDispatcher().addCallback(this, onBackPressedCallback);
+        toolbar.setNavigationOnClickListener(v -> {
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                getSupportFragmentManager().popBackStack();
+                updateBottomNavigationView();
+            } else {
+                finish();
+            }
+        });
     }
+
 
     /**
      * This is a wrapper for navigation between fragments
@@ -198,13 +229,13 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(updateBottomNavRunnable, 100); // Delay in milliseconds
     }
 
-    private void showBottomDialog(){
+    private void showBottomDialog() {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.bottomsheetlayout);
 
         dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.getWindow().setGravity(Gravity.BOTTOM);

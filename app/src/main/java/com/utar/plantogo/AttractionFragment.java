@@ -63,7 +63,8 @@ public class AttractionFragment extends Fragment {
         ratingBar.setRating(location.getDetails().getRating());
 
         TextView ratingCount = view.findViewById(R.id.tv_rating_count);
-        ratingCount.setText(String.format(Locale.ENGLISH, "(%s)", location.getDetails().getNumReviews()));
+        String numberOfReviews = location.getDetails().getNumReviews() == null ? "0" : location.getDetails().getNumReviews();
+        ratingCount.setText(String.format(Locale.ENGLISH, "(%s)", numberOfReviews));
 
         carouselContainer = view.findViewById(R.id.fl_carousel_container);
         carouselRecyclerView = new RecyclerView(requireContext());
