@@ -73,4 +73,70 @@ public class TripAdvisor implements TripAdvisorAPI {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void locationSearch(@NonNull String searchQuery, Optional<String> latLong, Optional<String> category, Optional<String> phone, Optional<String> address, Optional<String> radius, Optional<String> radiusUnit, Optional<String> language, APIRequest.ResponseCallback callback) {
+        try {
+            JSONObject jsonBody = new JSONObject();
+            jsonBody.put("searchQuery", searchQuery);
+            latLong.ifPresent(value -> {
+                try {
+                    jsonBody.put("latLong", value);
+                } catch (JSONException e) {
+                    throw  new RuntimeException(e);
+                }
+            });
+            category.ifPresent(value -> {
+                try {
+                    jsonBody.put("category", value);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            phone.ifPresent(value -> {
+                try {
+                    jsonBody.put("phone", value);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            address.ifPresent(value -> {
+                try {
+                    jsonBody.put("address", value);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            radius.ifPresent(value -> {
+                try {
+                    jsonBody.put("radius", value);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            radiusUnit.ifPresent(value -> {
+                try {
+                    jsonBody.put("radiusUnit", value);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            language.ifPresent(value -> {
+                try {
+                    jsonBody.put("language", value);
+                } catch (JSONException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+            APIRequest apiRequest = new APIRequest(FETCH_NEARBY_LOCATION);
+            apiRequest.addHeader("Authorization", "Bearer " + API_KEY);
+            apiRequest.addHeader("Content-Type", "application/json");
+            apiRequest.setRequestMethod(APIRequest.REQUEST_METHOD.POST);
+            apiRequest.setRequestBody(jsonBody.toString());
+            apiRequest.makeRequest(callback);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
