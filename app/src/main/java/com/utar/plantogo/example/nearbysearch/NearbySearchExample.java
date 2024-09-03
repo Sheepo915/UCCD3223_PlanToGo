@@ -51,7 +51,8 @@ public class NearbySearchExample {
                     jsonContent = reader.lines().collect(Collectors.joining(System.lineSeparator()));
                 }
 
-                Type listType = new TypeToken<List<Location>>() {}.getType();
+                Type listType = new TypeToken<List<Location>>() {
+                }.getType();
                 List<Location> locations = new Gson().fromJson(jsonContent, listType);
 
                 Log.d("NearbySearch", "loadExampleResponse: " + locations);
