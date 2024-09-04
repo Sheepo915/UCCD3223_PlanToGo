@@ -241,8 +241,8 @@ public class MainActivity extends AppCompatActivity {
         TextInputEditText UserName = bottomSheetView.findViewById(R.id.UserName);
         TextInputEditText UserPass = bottomSheetView.findViewById(R.id.UserPassword);
         TextInputEditText UserConPass = bottomSheetView.findViewById(R.id.UserConfirmPassword);
-        TextView Login = bottomSheetView.findViewById(R.id.LoginBtn);
-        Button RegisBtn =findViewById(R.id.RegisterBtn);
+        TextView Login = bottomSheetView.findViewById(R.id.btn_login);
+        Button RegisBtn = bottomSheetView.findViewById(R.id.btn_register);
 
         Login.setOnClickListener(v -> {
             // Show the second bottom sheet for login
@@ -272,17 +272,17 @@ public class MainActivity extends AppCompatActivity {
 
     private void showLoginBottomSheet() {
         // Inflate the second bottom sheet layout
-        View loginSheetView = getLayoutInflater().inflate(R.layout.bottomsheetlayout, null);
+        View loginSheetView = getLayoutInflater().inflate(R.layout.layout_bottom_sheet, null);
 
         // Initialize the BottomSheetDialog for login
         BottomSheetDialog loginBottomSheetDialog = new BottomSheetDialog(this);
         loginBottomSheetDialog.setContentView(loginSheetView);
 
         // Get references to the inputs and button
-        TextInputEditText UserName = loginSheetView.findViewById(R.id.LoginName);
-        TextInputEditText LoginPassword = loginSheetView.findViewById(R.id.LoginPassword);
-        Button LoginBtn = loginSheetView.findViewById(R.id.LoginBtn);
-        TextView RegisBTN = loginSheetView.findViewById(R.id.RegisterBtn);
+        TextInputEditText UserName = loginSheetView.findViewById(R.id.ti_login_name);
+        TextInputEditText LoginPassword = loginSheetView.findViewById(R.id.ti_login_password);
+        Button LoginBtn = loginSheetView.findViewById(R.id.btn_login);
+        TextView RegisBTN = loginSheetView.findViewById(R.id.btn_register);
 
         // Set onClick listener for the confirm login button
         LoginBtn.setOnClickListener(v -> {
