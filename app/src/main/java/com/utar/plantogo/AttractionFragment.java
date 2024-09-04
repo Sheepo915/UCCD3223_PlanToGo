@@ -1,14 +1,15 @@
 package com.utar.plantogo;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +21,9 @@ import com.utar.plantogo.ui.RecyclerViewItemDecoration;
 import com.utar.plantogo.ui.carousel.CarouselPhotoAdapter;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 
@@ -54,6 +58,8 @@ public class AttractionFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_attraction, container, false);
         location = fragmentViewModel.getSelectedLocation().getValue();
 
+        LinearLayout contentContainer = view.findViewById(R.id.ll_content_container);
+
         TextView attractionName = view.findViewById(R.id.tv_attraction_name);
         attractionName.setText(location.getName());
 
@@ -64,10 +70,39 @@ public class AttractionFragment extends Fragment {
         String numberOfReviews = location.getDetails().getNumReviews() == null ? "0" : location.getDetails().getNumReviews();
         ratingCount.setText(String.format(Locale.ENGLISH, "(%s)", numberOfReviews));
 
+        TextView overview = view.findViewById(R.id.tv_overview);
+        overview.setText(R.string.overview_active);
+
+        TextView review = view.findViewById(R.id.tv_review);
+
+        ConstraintLayout address = createOverviewInfoCard("Address", location.getAddressObj().getAddressString());
+        ConstraintLayout website = null;
+        try {
+            website = createOverviewInfoCard("Website", URLDecoder.decode(location.getDetails().getWebsite(), StandardCharsets.UTF_8.name()));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+
+        // Initiate photo carousel
         carouselContainer = view.findViewById(R.id.fl_carousel_container);
         carouselRecyclerView = new RecyclerView(requireContext());
-
         setupCarousel(location.getPhotos());
+
+        // Setup content
+        contentContainer.addView(address);
+        if (website != null) {
+            contentContainer.addView(website);
+        }
+
+        overview.setOnClickListener(v -> {
+            overview.setText(R.string.overview_active);
+            review.setText(R.string.reviews);
+        });
+
+        review.setOnClickListener(v -> {
+            overview.setText(R.string.overview);
+            review.setText(R.string.reviews_active);
+        });
 
         return view;
     }
@@ -92,5 +127,18 @@ public class AttractionFragment extends Fragment {
 
         // Add the carousel RecyclerView to the container
         carouselContainer.addView(carouselRecyclerView);
+    }
+
+    protected ConstraintLayout createOverviewInfoCard(String title, String content) {
+        LayoutInflater inflater = LayoutInflater.from(requireContext());
+        ConstraintLayout constraintLayout = (ConstraintLayout) inflater.inflate(R.layout.component_attraction_info_card, null);
+
+        TextView cardTitle = constraintLayout.findViewById(R.id.tv_card_title);
+        TextView cardContent = constraintLayout.findViewById(R.id.tv_card_content);
+
+        cardTitle.setText(title);
+        cardContent.setText(content);
+
+        return constraintLayout;
     }
 }
