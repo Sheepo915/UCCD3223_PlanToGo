@@ -3,6 +3,7 @@ package com.utar.plantogo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.utar.plantogo.internal.APIRequest;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
+import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -238,7 +240,7 @@ public class MainActivity extends AppCompatActivity {
         BottomSheetDialog RegisBottomSheetDialog = new BottomSheetDialog(this);
         RegisBottomSheetDialog.setContentView(bottomSheetView);
 
-        TextInputEditText UserName = bottomSheetView.findViewById(R.id.UserName);
+        TextInputEditText UserEmail = bottomSheetView.findViewById(R.id.UserEmail);
         TextInputEditText UserPass = bottomSheetView.findViewById(R.id.UserPassword);
         TextInputEditText UserConPass = bottomSheetView.findViewById(R.id.UserConfirmPassword);
         TextView Login = bottomSheetView.findViewById(R.id.btn_login);
@@ -252,12 +254,12 @@ public class MainActivity extends AppCompatActivity {
 
         RegisBtn.setOnClickListener(v -> {
             // Handle registration logic here
-            String name = UserName.getText().toString();
+            String email = UserEmail.getText().toString();
             String password = UserPass.getText().toString();
             String Conpassword = UserConPass.getText().toString();
 
             if(password.equals(Conpassword)){
-                handleRegister(name, password);
+                handleRegister(email, password);
                 RegisBottomSheetDialog.dismiss(); // Dismiss the first bottom sheet
             }
             else{
@@ -279,7 +281,7 @@ public class MainActivity extends AppCompatActivity {
         loginBottomSheetDialog.setContentView(loginSheetView);
 
         // Get references to the inputs and button
-        TextInputEditText UserName = loginSheetView.findViewById(R.id.ti_login_name);
+        TextInputEditText UserName = loginSheetView.findViewById(R.id.ti_login_email);
         TextInputEditText LoginPassword = loginSheetView.findViewById(R.id.ti_login_password);
         Button LoginBtn = loginSheetView.findViewById(R.id.btn_login);
         TextView RegisBTN = loginSheetView.findViewById(R.id.btn_register);
@@ -311,22 +313,36 @@ public class MainActivity extends AppCompatActivity {
         // Navigate to the main activity or perform desired action on successful login
     }
 
-    private void handleRegister(String name, String password) {
-        // Perform registration actions (e.g., save credentials to Supabase)
+    private void handleRegister(String email, String password) {
         try {
-            String jsonBody = String.format("{\"name\": \"%s\", \"password\": \"%s\"}", name, password);
-            APIRequest apiRequest = new APIRequest(SUPABASE_URL + "/auth/v1/signup");
+            APIRequest apiRequest = new APIRequest(SUPABASE_URL);
+            apiRequest.setRequestMethod(APIRequest.REQUEST_METHOD.POST);
+
+            String jsonBody = String.format("{\"email\": \"%s\", \"password\": \"%s\"}", email, password);
+            apiRequest.setRequestBody(jsonBody);
+
             apiRequest.addHeader("Content-Type", "application/json");
             apiRequest.addHeader("apikey", SUPABASE_KEY);
-//            apiRequest.addHeader("Authorization", "Bearer " + SUPABASE_KEY);
-            apiRequest.setRequestMethod(APIRequest.REQUEST_METHOD.POST);
-            apiRequest.setRequestBody(jsonBody);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        // Placeholder: Show a toast for now
-        Toast.makeText(this, "Registering with: " + name, Toast.LENGTH_SHORT).show();
+            apiRequest.addHeader("Authorization", SUPABASE_KEY);
 
-        // Navigate to the main activity or perform desired action on successful registration
+            apiRequest.makeRequest(new APIRequest.ResponseCallback() {
+                @Override
+                public void onSuccess(Map<String, Object> responseMap) {
+                    // Handle successful registration
+                    Log.d("SupabaseAuth", "Registration successful: " + responseMap.toString());
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    // Handle errors
+                    e.printStackTrace();
+                    Log.e("SupabaseAuth", "Registration failed: " + e.getMessage());
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error initializing APIRequest: " + e.getMessage());
+        }
     }
 }
