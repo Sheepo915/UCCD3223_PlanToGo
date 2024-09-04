@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.internal.tripadvisor.model.Photo;
+import com.utar.plantogo.internal.tripadvisor.model.Review;
 import com.utar.plantogo.ui.RecyclerViewItemDecoration;
 import com.utar.plantogo.ui.carousel.CarouselPhotoAdapter;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
@@ -75,6 +76,36 @@ public class AttractionFragment extends Fragment {
 
         TextView review = view.findViewById(R.id.tv_review);
 
+        // Initiate photo carousel
+        carouselContainer = view.findViewById(R.id.fl_carousel_container);
+        carouselRecyclerView = new RecyclerView(requireContext());
+        setupCarousel(location.getPhotos());
+
+        // Default content showed on start
+        instantiateOverviewContent(contentContainer);
+
+        overview.setOnClickListener(v -> {
+            overview.setText(R.string.overview_active);
+            review.setText(R.string.reviews);
+
+            contentContainer.removeAllViews();
+
+            instantiateOverviewContent(contentContainer);
+        });
+
+        review.setOnClickListener(v -> {
+            overview.setText(R.string.overview);
+            review.setText(R.string.reviews_active);
+
+            contentContainer.removeAllViews();
+
+            instantiateReviewContent(contentContainer);
+        });
+
+        return view;
+    }
+
+    private void instantiateOverviewContent(LinearLayout contentContainer) {
         ConstraintLayout address = createOverviewInfoCard("Address", location.getAddressObj().getAddressString());
         ConstraintLayout website = null;
         try {
@@ -83,28 +114,22 @@ public class AttractionFragment extends Fragment {
             throw new RuntimeException(e);
         }
 
-        // Initiate photo carousel
-        carouselContainer = view.findViewById(R.id.fl_carousel_container);
-        carouselRecyclerView = new RecyclerView(requireContext());
-        setupCarousel(location.getPhotos());
-
         // Setup content
         contentContainer.addView(address);
         if (website != null) {
             contentContainer.addView(website);
         }
+    }
 
-        overview.setOnClickListener(v -> {
-            overview.setText(R.string.overview_active);
-            review.setText(R.string.reviews);
-        });
+    private void instantiateReviewContent(LinearLayout contentContainer) {
+        List<Review> reviews = location.getReviews();
 
-        review.setOnClickListener(v -> {
-            overview.setText(R.string.overview);
-            review.setText(R.string.reviews_active);
-        });
-
-        return view;
+        if (!reviews.isEmpty()) {
+            for (Review review : reviews) {
+                ConstraintLayout reviewCard = createReviewCard(review.getUser().getUsername(), review.getRating(), review.getText());
+                contentContainer.addView(reviewCard);
+            }
+        }
     }
 
     private void setupCarousel(List<Photo> data) {
@@ -138,6 +163,21 @@ public class AttractionFragment extends Fragment {
 
         cardTitle.setText(title);
         cardContent.setText(content);
+
+        return constraintLayout;
+    }
+
+    protected ConstraintLayout createReviewCard(String username, float rating, String reviews) {
+        LayoutInflater inflater = LayoutInflater.from(requireContext());
+        ConstraintLayout constraintLayout = (ConstraintLayout) inflater.inflate(R.layout.component_attraction_review_card, null);
+
+        TextView cardUsername = constraintLayout.findViewById(R.id.tv_username);
+        TextView cardReview = constraintLayout.findViewById(R.id.tv_review);
+        RatingBar ratingBar = constraintLayout.findViewById(R.id.rb_rating);
+
+        cardUsername.setText(username);
+        cardReview.setText(reviews);
+        ratingBar.setRating(rating);
 
         return constraintLayout;
     }
