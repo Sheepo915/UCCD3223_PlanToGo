@@ -21,11 +21,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/iv_attraction_img" />
 
-    <TextView
-        android:id="@+id/tv_rating"
+    <RatingBar
+        android:id="@+id/rb_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        style="@style/Widget.AppCompat.RatingBar.Small"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_attraction_name" />
 

@@ -3,6 +3,7 @@ package com.utar.plantogo.ui.attraction;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -16,7 +17,7 @@ import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 public class AttractionCarouselComponent extends AttractionComponent {
     private ImageView attractionShowcaseImage;
     private TextView attractionName;
-    private TextView rating;
+    private RatingBar rating;
 
     public AttractionCarouselComponent(@NonNull Context context, FragmentManager fragmentManager, FragmentViewModel fragmentViewModel) {
         super(context, fragmentManager, fragmentViewModel);
@@ -30,7 +31,7 @@ public class AttractionCarouselComponent extends AttractionComponent {
         // Find views
         attractionShowcaseImage = findViewById(R.id.iv_attraction_img);
         attractionName = findViewById(R.id.tv_attraction_name);
-        rating = findViewById(R.id.tv_rating);
+        rating = findViewById(R.id.rb_rating);
     }
 
     @Override
@@ -39,7 +40,7 @@ public class AttractionCarouselComponent extends AttractionComponent {
 
         if (location != null) {
             setAttractionName(location.getName());
-            setRating((double) location.getDetails().getRating());
+            rating.setRating(location.getDetails().getRating());
 
             String imageUrl = null;
             if (location.getPhotos() != null && !location.getPhotos().isEmpty()) {
@@ -62,13 +63,6 @@ public class AttractionCarouselComponent extends AttractionComponent {
             this.attractionName.setText(attractionName);
         } else {
             this.attractionName.setText(R.string.loading);
-        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    public void setRating(Double rating) {
-        if (rating != null) {
-            this.rating.setText(rating.toString());
         }
     }
 }

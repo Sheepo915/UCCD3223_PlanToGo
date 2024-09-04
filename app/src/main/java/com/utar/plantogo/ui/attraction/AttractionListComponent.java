@@ -3,6 +3,7 @@ package com.utar.plantogo.ui.attraction;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -15,7 +16,8 @@ import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 public class AttractionListComponent extends AttractionComponent {
     ImageView attractionShowcaseImage;
-    TextView attractionName, rating;
+    TextView attractionName, rating, location;
+    RatingBar ratingBar;
 
     public AttractionListComponent(@NonNull Context context, FragmentManager fragmentManager, FragmentViewModel fragmentViewModel) {
         super(context, fragmentManager, fragmentViewModel);
@@ -27,7 +29,9 @@ public class AttractionListComponent extends AttractionComponent {
 
         attractionShowcaseImage = findViewById(R.id.iv_attraction_list_img);
         attractionName = findViewById(R.id.tv_attraction_list_name);
-        rating = findViewById(R.id.tv_attraction_list_rating);
+        rating = findViewById(R.id.tv_review_count);
+        ratingBar = findViewById(R.id.rb_rating);
+        location = findViewById(R.id.tv_attraction_location);
     }
 
     @Override
@@ -36,7 +40,12 @@ public class AttractionListComponent extends AttractionComponent {
 
         if (location != null) {
             setAttractionName(location.getName());
-            setRating((double) location.getDetails().getRating());
+            setRating(location.getDetails().getNumReviews());
+
+            ratingBar.setRating(location.getDetails().getRating());
+
+            String locationString = location.getAddressObj().getCity() + ", " + location.getAddressObj().getState();
+            this.location.setText(locationString);
 
             String imageUrl = null;
             if (location.getPhotos() != null && !location.getPhotos().isEmpty()) {
@@ -63,9 +72,9 @@ public class AttractionListComponent extends AttractionComponent {
     }
 
     @SuppressLint("SetTextI18n")
-    public void setRating(Double rating) {
+    public void setRating(String rating) {
         if (rating != null) {
-            this.rating.setText(rating.toString());
+            this.rating.setText("(" + rating + ")");
         }
     }
 }
