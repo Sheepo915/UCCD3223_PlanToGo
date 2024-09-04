@@ -6,6 +6,7 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
+import com.utar.plantogo.internal.APIRequest;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 import java.util.Objects;
@@ -49,7 +51,10 @@ public class MainActivity extends AppCompatActivity {
     private OnBackPressedCallback onBackPressedCallback;
     private Runnable updateBottomNavRunnable;
     private FragmentViewModel fragmentViewModel;
-    private TextView LoginText;
+
+    private static final String SUPABASE_URL = "https://bcmbrswetxlzoujdpcsw.supabase.co";
+    private static final String SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjbWJyc3dldHhsem91amRwY3N3Iiwicm" +
+            "9sZSI6ImFub24iLCJpYXQiOjE3MjQ5MjY4NjMsImV4cCI6MjA0MDUwMjg2M30.rWSWJEloIoEO5g9h1m4qh37QCdrL1Ef29jEVFMASgNQ";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         // Initialize Toolbar and BottomNavigationView
         toolbar = findViewById(R.id.toolbar);
         bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
-        LoginText = findViewById(R.id.tv_profile_header_action_text);
+        TextView loginText = findViewById(R.id.tv_profile_header_action_text);
 
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
@@ -118,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        LoginText.setOnClickListener(new View.OnClickListener() {
+        loginText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showRegisDialog();
@@ -246,6 +251,22 @@ public class MainActivity extends AppCompatActivity {
             RegisBottomSheetDialog.dismiss(); // Dismiss the first bottom sheet
         });
 
+        RegisBtn.setOnClickListener(v -> {
+            // Handle registration logic here
+            String name = UserName.getText().toString();
+            String password = UserPass.getText().toString();
+            String Conpassword = UserConPass.getText().toString();
+
+            if(password.equals(Conpassword)){
+                handleRegister(name, password);
+                RegisBottomSheetDialog.dismiss(); // Dismiss the first bottom sheet
+            }
+            else{
+                Toast.makeText(this, "Password is not the same. " , Toast.LENGTH_SHORT).show();
+            }
+
+        });
+
         RegisBottomSheetDialog.show();
 
     }
@@ -269,7 +290,7 @@ public class MainActivity extends AppCompatActivity {
             // Handle login confirmation logic here
             String username = UserName.getText().toString();
             String loginPassword = LoginPassword.getText().toString();
-            //handleLogin(username, loginPassword);
+            handleLogin(username, loginPassword);
             loginBottomSheetDialog.dismiss(); // Dismiss the login bottom sheet
         });
 
@@ -281,5 +302,32 @@ public class MainActivity extends AppCompatActivity {
 
         // Show the second BottomSheetDialog for login
         loginBottomSheetDialog.show();
+    }
+
+    private void handleLogin(String username, String password) {
+        // Perform login actions (e.g., validate credentials against Supabase or local storage)
+        // Placeholder: Show a toast for now
+        Toast.makeText(this, "Logging in with: " + username, Toast.LENGTH_SHORT).show();
+
+        // Navigate to the main activity or perform desired action on successful login
+    }
+
+    private void handleRegister(String name, String password) {
+        // Perform registration actions (e.g., save credentials to Supabase)
+        try {
+            String jsonBody = String.format("{\"name\": \"%s\", \"password\": \"%s\"}", name, password);
+            APIRequest apiRequest = new APIRequest("https://bcmbrswetxlzoujdpcsw.supabase.co");
+            apiRequest.addHeader("Content-Type", "application/json");
+            apiRequest.addHeader("apikey", SUPABASE_KEY);
+            apiRequest.addHeader("Authorization", "Bearer " + SUPABASE_KEY);
+            apiRequest.setRequestMethod(APIRequest.REQUEST_METHOD.POST);
+            apiRequest.setRequestBody(jsonBody);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        // Placeholder: Show a toast for now
+        Toast.makeText(this, "Registering with: " + name, Toast.LENGTH_SHORT).show();
+
+        // Navigate to the main activity or perform desired action on successful registration
     }
 }
