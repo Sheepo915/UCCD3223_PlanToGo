@@ -1,11 +1,14 @@
 package com.utar.plantogo.internal.tripadvisor.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Address {
     private String street1;
     private String city;
     private String state;
     private String country;
     private String postalcode;
+    @SerializedName("address_string")
     private String addressString;
 
     public String getStreet1() {

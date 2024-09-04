@@ -1,12 +1,16 @@
 package com.utar.plantogo.internal.tripadvisor.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Location {
+    @SerializedName("location_id")
     private String locationId;
     private String name;
     private String distance;
     private String bearing;
+    @SerializedName("address_obj")
     private Address addressObj;
     private LocationDetails details;
     private List<Photo> photos;
