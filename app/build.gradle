@@ -66,4 +66,7 @@ dependencies {
 
     // Glide: Media management and caching library
     implementation libs.glide
+
+    // Google Map SDK
+    implementation libs.play.services.maps
 }
