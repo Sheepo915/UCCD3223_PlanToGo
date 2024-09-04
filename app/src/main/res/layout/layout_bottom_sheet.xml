@@ -22,7 +22,7 @@
 
 
         <TextView
-            android:id="@+id/createText"
+            android:id="@+id/tv_create_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
@@ -53,7 +53,7 @@
         >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/LoginName"
+            android:id="@+id/ti_login_name"
             android:maxLength="20"
             android:inputType="text"
             android:layout_width="match_parent"
@@ -74,7 +74,7 @@
         >
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/LoginPassword"
+            android:id="@+id/ti_login_password"
             android:maxLength="20"
             android:inputType="numberPassword"
             android:layout_width="match_parent"
@@ -83,7 +83,7 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/RegisterBtn"
+        android:id="@+id/btn_register"
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -95,7 +95,7 @@
         android:focusable="true" />
 
     <Button
-        android:id="@+id/LoginBtn"
+        android:id="@+id/btn_login"
         android:layout_width="100dp"
         android:layout_height="42dp"
         android:text="@string/login"

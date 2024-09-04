@@ -22,7 +22,7 @@
 
 
         <TextView
-            android:id="@+id/createText"
+            android:id="@+id/tv_create_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:padding="8dp"
@@ -104,19 +104,19 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
-        android:id="@+id/LoginBtn"
+        android:id="@+id/btn_login"
         android:clickable="true"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="Have an account?"
+        android:text="@string/have_an_account"
         android:textAlignment="center"
         android:textColor="@color/background_dark"
         android:textStyle="bold"
         android:focusable="true" />
 
     <Button
-        android:id="@+id/RegisterBtn"
+        android:id="@+id/btn_register"
         android:layout_width="118dp"
         android:layout_height="43dp"
         android:layout_gravity="center"
