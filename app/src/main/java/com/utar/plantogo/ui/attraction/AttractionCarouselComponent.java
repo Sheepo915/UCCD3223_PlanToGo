@@ -18,15 +18,26 @@ public class AttractionCarouselComponent extends AttractionComponent {
     private ImageView attractionShowcaseImage;
     private TextView attractionName;
     private RatingBar rating;
+    private boolean photoOnly;
 
     public AttractionCarouselComponent(@NonNull Context context, FragmentManager fragmentManager, FragmentViewModel fragmentViewModel) {
         super(context, fragmentManager, fragmentViewModel);
         init(context);
     }
 
+    public AttractionCarouselComponent(@NonNull Context context, FragmentManager fragmentManager, FragmentViewModel fragmentViewModel, boolean photoOnly) {
+        super(context, fragmentManager, fragmentViewModel);
+        this.photoOnly = photoOnly;
+        init(context);
+    }
+
     private void init(@NonNull Context context) {
         // Inflate the XML layout
-        inflate(context, R.layout.component_attraction_carousel_list, this);
+        if (photoOnly) {
+            inflate(context, R.layout.component_attraction_carousel_photo, this);
+        } else {
+            inflate(context, R.layout.component_attraction_carousel_list, this);
+        }
 
         // Find views
         attractionShowcaseImage = findViewById(R.id.iv_attraction_img);

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -49,10 +50,14 @@ public class HomeFragment extends Fragment {
         View searchViewLayout = inflater.inflate(R.layout.component_search, container, false);
         SearchView searchView = searchViewLayout.findViewById(R.id.sv_attraction_search);
 
+        TextView showAllAttraction = view.findViewById(R.id.tv_show_all_attraction);
+        showAllAttraction.setOnClickListener(v -> {
+            navigateToSearchFragment("");
+        });
+
         // Find the container in fragment_home where you want to add the searchViewLayout
         FrameLayout searchContainer = view.findViewById(R.id.fl_search_container);
         searchContainer.addView(searchViewLayout);
-
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

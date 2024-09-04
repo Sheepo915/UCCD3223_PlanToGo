@@ -19,6 +19,7 @@ public class CarouselPhotoAdapter extends RecyclerView.Adapter<CarouselPhotoAdap
     private final List<Photo> data;
     private final FragmentManager fragmentManager;
     private final FragmentViewModel fragmentViewModel;
+    private boolean photoOnly = false;
 
     public CarouselPhotoAdapter(Context context, List<Photo> data, FragmentManager fragmentManager, FragmentViewModel fragmentViewModel) {
         this.context = context;
@@ -27,10 +28,18 @@ public class CarouselPhotoAdapter extends RecyclerView.Adapter<CarouselPhotoAdap
         this.fragmentViewModel = fragmentViewModel;
     }
 
+    public CarouselPhotoAdapter(Context context, List<Photo> data, FragmentManager fragmentManager, FragmentViewModel fragmentViewModel, boolean photoOnly) {
+        this.context = context;
+        this.fragmentManager = fragmentManager;
+        this.data = data;
+        this.fragmentViewModel = fragmentViewModel;
+        this.photoOnly = photoOnly;
+    }
+
     @NonNull
     @Override
     public CarouselPhotoAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        AttractionCarouselComponent attractionCarouselComponent = new AttractionCarouselComponent(context, fragmentManager, fragmentViewModel);
+        AttractionCarouselComponent attractionCarouselComponent = new AttractionCarouselComponent(context, fragmentManager, fragmentViewModel, photoOnly);
         return new CarouselPhotoAdapter.ViewHolder(attractionCarouselComponent);
     }
 

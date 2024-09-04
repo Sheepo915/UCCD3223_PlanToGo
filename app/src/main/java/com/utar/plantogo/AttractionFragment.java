@@ -135,7 +135,7 @@ public class AttractionFragment extends Fragment {
     private void setupCarousel(List<Photo> data) {
         // Initialize and set up the carousel RecyclerView
         carouselRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-        CarouselPhotoAdapter adapter = new CarouselPhotoAdapter(getContext(), data, getParentFragmentManager(), fragmentViewModel);
+        CarouselPhotoAdapter adapter = new CarouselPhotoAdapter(getContext(), data, getParentFragmentManager(), fragmentViewModel, true);
         carouselRecyclerView.setAdapter(adapter);
 
         // Define margins and spacing
