@@ -315,10 +315,10 @@ public class MainActivity extends AppCompatActivity {
         // Perform registration actions (e.g., save credentials to Supabase)
         try {
             String jsonBody = String.format("{\"name\": \"%s\", \"password\": \"%s\"}", name, password);
-            APIRequest apiRequest = new APIRequest("https://bcmbrswetxlzoujdpcsw.supabase.co");
+            APIRequest apiRequest = new APIRequest(SUPABASE_URL + "/auth/v1/signup");
             apiRequest.addHeader("Content-Type", "application/json");
             apiRequest.addHeader("apikey", SUPABASE_KEY);
-            apiRequest.addHeader("Authorization", "Bearer " + SUPABASE_KEY);
+//            apiRequest.addHeader("Authorization", "Bearer " + SUPABASE_KEY);
             apiRequest.setRequestMethod(APIRequest.REQUEST_METHOD.POST);
             apiRequest.setRequestBody(jsonBody);
         } catch (Exception e) {
