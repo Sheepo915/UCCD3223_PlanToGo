@@ -1,7 +1,6 @@
 package com.utar.plantogo;
 
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +17,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.internal.tripadvisor.model.Photo;
 import com.utar.plantogo.ui.RecyclerViewItemDecoration;
-import com.utar.plantogo.ui.carousel.CarouselLocationAdapter;
 import com.utar.plantogo.ui.carousel.CarouselPhotoAdapter;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
