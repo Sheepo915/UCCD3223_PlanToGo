@@ -1,15 +1,10 @@
 package com.utar.plantogo;
 
-import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.activity.OnBackPressedCallback;
@@ -20,6 +15,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.textfield.TextInputEditText;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 import java.util.Objects;
@@ -124,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
         LoginText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showBottomDialog();
+                showRegisDialog();
             }
         });
 
@@ -229,16 +226,60 @@ public class MainActivity extends AppCompatActivity {
         handler.postDelayed(updateBottomNavRunnable, 100); // Delay in milliseconds
     }
 
-    private void showBottomDialog() {
-        final Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.bottomsheetlayout);
+    private void showRegisDialog() {
+        // Inflate the first bottom sheet layout
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.registerbottomsheet, null);
 
-        dialog.show();
-        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
-        dialog.getWindow().setGravity(Gravity.BOTTOM);
+        // Initialize the BottomSheetDialog
+        BottomSheetDialog RegisBottomSheetDialog = new BottomSheetDialog(this);
+        RegisBottomSheetDialog.setContentView(bottomSheetView);
 
+        TextInputEditText UserName = bottomSheetView.findViewById(R.id.UserName);
+        TextInputEditText UserPass = bottomSheetView.findViewById(R.id.UserPassword);
+        TextInputEditText UserConPass = bottomSheetView.findViewById(R.id.UserConfirmPassword);
+        TextView Login = bottomSheetView.findViewById(R.id.LoginBtn);
+        Button RegisBtn =findViewById(R.id.RegisterBtn);
+
+        Login.setOnClickListener(v -> {
+            // Show the second bottom sheet for login
+            showLoginBottomSheet();
+            RegisBottomSheetDialog.dismiss(); // Dismiss the first bottom sheet
+        });
+
+        RegisBottomSheetDialog.show();
+
+    }
+
+    private void showLoginBottomSheet() {
+        // Inflate the second bottom sheet layout
+        View loginSheetView = getLayoutInflater().inflate(R.layout.bottomsheetlayout, null);
+
+        // Initialize the BottomSheetDialog for login
+        BottomSheetDialog loginBottomSheetDialog = new BottomSheetDialog(this);
+        loginBottomSheetDialog.setContentView(loginSheetView);
+
+        // Get references to the inputs and button
+        TextInputEditText UserName = loginSheetView.findViewById(R.id.LoginName);
+        TextInputEditText LoginPassword = loginSheetView.findViewById(R.id.LoginPassword);
+        Button LoginBtn = loginSheetView.findViewById(R.id.LoginBtn);
+        TextView RegisBTN = loginSheetView.findViewById(R.id.RegisterBtn);
+
+        // Set onClick listener for the confirm login button
+        LoginBtn.setOnClickListener(v -> {
+            // Handle login confirmation logic here
+            String username = UserName.getText().toString();
+            String loginPassword = LoginPassword.getText().toString();
+            //handleLogin(username, loginPassword);
+            loginBottomSheetDialog.dismiss(); // Dismiss the login bottom sheet
+        });
+
+        RegisBTN.setOnClickListener(v -> {
+            // Show the second bottom sheet for login
+            showRegisDialog();
+            loginBottomSheetDialog.dismiss(); // Dismiss the first bottom sheet
+        });
+
+        // Show the second BottomSheetDialog for login
+        loginBottomSheetDialog.show();
     }
 }

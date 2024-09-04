@@ -15,4 +15,9 @@
     <string name="photo">Photos</string>
     <string name="overview">Overview</string>
     <string name="reviews">Reviews</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
 </resources>
