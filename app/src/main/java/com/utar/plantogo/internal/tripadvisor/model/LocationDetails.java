@@ -1,5 +1,7 @@
 package com.utar.plantogo.internal.tripadvisor.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +19,7 @@ public class LocationDetails {
     private String website;
     private float rating;
     private String writeReview;
+    @SerializedName("num_reviews")
     private String numReviews;
     private Map<String, Subrating> subratings;
     private String photoCount;
