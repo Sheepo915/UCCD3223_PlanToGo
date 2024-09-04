@@ -52,9 +52,8 @@ public class MainActivity extends AppCompatActivity {
     private Runnable updateBottomNavRunnable;
     private FragmentViewModel fragmentViewModel;
 
-    private static final String SUPABASE_URL = "https://bcmbrswetxlzoujdpcsw.supabase.co";
-    private static final String SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjbWJyc3dldHhsem91amRwY3N3Iiwicm" +
-            "9sZSI6ImFub24iLCJpYXQiOjE3MjQ5MjY4NjMsImV4cCI6MjA0MDUwMjg2M30.rWSWJEloIoEO5g9h1m4qh37QCdrL1Ef29jEVFMASgNQ";
+    private static final String SUPABASE_URL = BuildConfig.SUPABASE_BASE_URL;
+    private static final String SUPABASE_KEY = BuildConfig.SUPABASE_API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
