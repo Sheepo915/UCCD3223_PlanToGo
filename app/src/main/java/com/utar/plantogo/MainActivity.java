@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private Runnable updateBottomNavRunnable;
     private FragmentViewModel fragmentViewModel;
 
-    private static final String SUPABASE_URL = BuildConfig.SUPABASE_BASE_URL;
+    private static final String SUPABASE_BASE_URL = BuildConfig.SUPABASE_BASE_URL;
     private static final String SUPABASE_KEY = BuildConfig.SUPABASE_API_KEY;
 
     @Override
@@ -315,7 +315,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleRegister(String email, String password) {
         try {
-            APIRequest apiRequest = new APIRequest(SUPABASE_URL);
+            APIRequest apiRequest = new APIRequest(SUPABASE_BASE_URL + "/auth/v1/signup");
             apiRequest.setRequestMethod(APIRequest.REQUEST_METHOD.POST);
 
             String jsonBody = String.format("{\"email\": \"%s\", \"password\": \"%s\"}", email, password);
@@ -323,7 +323,6 @@ public class MainActivity extends AppCompatActivity {
 
             apiRequest.addHeader("Content-Type", "application/json");
             apiRequest.addHeader("apikey", SUPABASE_KEY);
-            apiRequest.addHeader("Authorization", SUPABASE_KEY);
 
             apiRequest.makeRequest(new APIRequest.ResponseCallback() {
                 @Override
