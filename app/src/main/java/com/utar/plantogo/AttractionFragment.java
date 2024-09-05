@@ -131,6 +131,9 @@ public class AttractionFragment extends Fragment {
         if (website != null) {
             contentContainer.addView(website);
         }
+
+        // Instantiate static map
+
     }
 
     private void instantiateReviewContent(LinearLayout contentContainer) {

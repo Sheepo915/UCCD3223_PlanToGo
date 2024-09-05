@@ -15,12 +15,14 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.room.Room;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.utar.plantogo.internal.APIRequest;
+import com.utar.plantogo.internal.db.AppDatabase;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 import java.util.Map;
@@ -48,6 +50,8 @@ import java.util.Objects;
  */
 public class MainActivity extends AppCompatActivity {
 
+    private static final String SUPABASE_BASE_URL = BuildConfig.SUPABASE_BASE_URL;
+    private static final String SUPABASE_KEY = BuildConfig.SUPABASE_API_KEY;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Toolbar toolbar;
     private BottomNavigationView bottomNavigationView;
@@ -56,12 +60,11 @@ public class MainActivity extends AppCompatActivity {
     private FragmentViewModel fragmentViewModel;
     private View profileHeaderContainer;
 
-    private static final String SUPABASE_BASE_URL = BuildConfig.SUPABASE_BASE_URL;
-    private static final String SUPABASE_KEY = BuildConfig.SUPABASE_API_KEY;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
 
         // Initialize Toolbar and BottomNavigationView
