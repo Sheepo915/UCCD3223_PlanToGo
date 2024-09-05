@@ -17,12 +17,11 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.textfield.TextInputEditText;
 import com.utar.plantogo.internal.APIRequest;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
-
-import org.w3c.dom.Text;
 
 import java.util.Map;
 import java.util.Objects;
@@ -55,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     private OnBackPressedCallback onBackPressedCallback;
     private Runnable updateBottomNavRunnable;
     private FragmentViewModel fragmentViewModel;
+    private View profileHeaderContainer;
 
     private static final String SUPABASE_BASE_URL = BuildConfig.SUPABASE_BASE_URL;
     private static final String SUPABASE_KEY = BuildConfig.SUPABASE_API_KEY;
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
 
-        View profileHeaderContainer = findViewById(R.id.cl_profile_header_container);
+        profileHeaderContainer = findViewById(R.id.cl_profile_header_container);
 
         // Set BottomNavigationView listener
         bottomNavigationView.setOnItemSelectedListener(item -> {
@@ -240,67 +240,69 @@ public class MainActivity extends AppCompatActivity {
 
     private void showRegisDialog() {
         // Inflate the first bottom sheet layout
-        View bottomSheetView = getLayoutInflater().inflate(R.layout.registerbottomsheet, null);
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.layout_register_bottom_sheet, null);
 
         // Initialize the BottomSheetDialog
-        BottomSheetDialog RegisBottomSheetDialog = new BottomSheetDialog(this);
-        RegisBottomSheetDialog.setContentView(bottomSheetView);
+        BottomSheetDialog registerBottomSheetDialog = new BottomSheetDialog(this);
+        registerBottomSheetDialog.setContentView(bottomSheetView);
+        registerBottomSheetDialog.getBehavior().setState(BottomSheetBehavior.STATE_EXPANDED);
 
-        TextInputEditText UserEmail = bottomSheetView.findViewById(R.id.UserEmail);
-        TextInputEditText UserPass = bottomSheetView.findViewById(R.id.UserPassword);
-        TextInputEditText UserConPass = bottomSheetView.findViewById(R.id.UserConfirmPassword);
+        TextInputEditText userEmail = bottomSheetView.findViewById(R.id.ti_user_email);
+        TextInputEditText userPassword = bottomSheetView.findViewById(R.id.ti_user_password);
+        TextInputEditText userConfirmPassword = bottomSheetView.findViewById(R.id.ti_user_confirm_password);
         TextView Login = bottomSheetView.findViewById(R.id.btn_login);
         Button RegisBtn = bottomSheetView.findViewById(R.id.btn_register);
 
         Login.setOnClickListener(v -> {
             // Show the second bottom sheet for login
             showLoginBottomSheet();
-            RegisBottomSheetDialog.dismiss(); // Dismiss the first bottom sheet
+            registerBottomSheetDialog.dismiss(); // Dismiss the first bottom sheet
         });
 
         RegisBtn.setOnClickListener(v -> {
             // Handle registration logic here
-            String email = UserEmail.getText().toString();
-            String password = UserPass.getText().toString();
-            String Conpassword = UserConPass.getText().toString();
+            String email = Objects.requireNonNull(userEmail.getText()).toString();
+            String password = Objects.requireNonNull(userPassword.getText()).toString();
+            String confirmPassword = Objects.requireNonNull(userConfirmPassword.getText()).toString();
 
-            if (password.equals(Conpassword)) {
+            if (password.equals(confirmPassword)) {
                 handleRegister(email, password);
-                RegisBottomSheetDialog.dismiss(); // Dismiss the first bottom sheet
+                registerBottomSheetDialog.dismiss(); // Dismiss the first bottom sheet
             } else {
                 Toast.makeText(this, "Password is not the same. ", Toast.LENGTH_SHORT).show();
             }
 
         });
 
-        RegisBottomSheetDialog.show();
+        registerBottomSheetDialog.show();
 
     }
 
     private void showLoginBottomSheet() {
         // Inflate the second bottom sheet layout
-        View loginSheetView = getLayoutInflater().inflate(R.layout.layout_bottom_sheet, null);
+        View loginSheetView = getLayoutInflater().inflate(R.layout.layout_login_bottom_sheet, null);
 
         // Initialize the BottomSheetDialog for login
         BottomSheetDialog loginBottomSheetDialog = new BottomSheetDialog(this);
         loginBottomSheetDialog.setContentView(loginSheetView);
+        loginBottomSheetDialog.getBehavior().setState(BottomSheetBehavior.STATE_EXPANDED);
 
         // Get references to the inputs and button
-        TextInputEditText LoginEmail = loginSheetView.findViewById(R.id.ti_login_email);
-        TextInputEditText LoginPassword = loginSheetView.findViewById(R.id.ti_login_password);
-        Button LoginBtn = loginSheetView.findViewById(R.id.btn_login);
-        TextView RegisBTN = loginSheetView.findViewById(R.id.btn_register);
+        TextInputEditText loginEmail = loginSheetView.findViewById(R.id.ti_login_email);
+        TextInputEditText loginPassword = loginSheetView.findViewById(R.id.ti_login_password);
+        Button loginButton = loginSheetView.findViewById(R.id.btn_login);
+        TextView registerButton = loginSheetView.findViewById(R.id.btn_register);
 
         // Set onClick listener for the confirm login button
-        LoginBtn.setOnClickListener(v -> {
+        loginButton.setOnClickListener(v -> {
             // Handle login confirmation logic here
-            String username = LoginEmail.getText().toString();
-            String loginPassword = LoginPassword.getText().toString();
-            handleLogin(username, loginPassword);
+            String username = Objects.requireNonNull(loginEmail.getText()).toString();
+            String password = Objects.requireNonNull(loginPassword.getText()).toString();
+            handleLogin(username, password);
             loginBottomSheetDialog.dismiss(); // Dismiss the login bottom sheet
         });
 
-        RegisBTN.setOnClickListener(v -> {
+        registerButton.setOnClickListener(v -> {
             // Show the second bottom sheet for login
             showRegisDialog();
             loginBottomSheetDialog.dismiss(); // Dismiss the first bottom sheet
@@ -334,6 +336,7 @@ public class MainActivity extends AppCompatActivity {
                     // Handle successful login
                     System.out.println("Login successful: " + responseMap.toString());
                     // Store user session data or move to the next screen
+                    profileHeaderContainer.findViewById(R.id.tv_username);
                 }
 
                 @Override
