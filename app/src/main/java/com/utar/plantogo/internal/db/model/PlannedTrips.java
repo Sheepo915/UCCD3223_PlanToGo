@@ -31,7 +31,4 @@ public class PlannedTrips {
 
     @ColumnInfo(name = "created_at")
     public String createdAt;
-
-    @Relation(parentColumn = "id", entityColumn = "planner_id")
-    public List<PlannedTripsDetails> tripsDetails;
 }

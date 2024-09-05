@@ -55,8 +55,6 @@ public class NearbySearchExample {
                 }.getType();
                 List<Location> locations = new Gson().fromJson(jsonContent, listType);
 
-                Log.d("NearbySearch", "loadExampleResponse: " + locations);
-
                 return locations;
             } catch (Exception e) {
                 throw new RuntimeException(e);
