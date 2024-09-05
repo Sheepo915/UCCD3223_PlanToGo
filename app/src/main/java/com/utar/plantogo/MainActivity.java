@@ -114,6 +114,10 @@ public class MainActivity extends AppCompatActivity {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 bottomNavigationView.setVisibility(View.GONE);
                 profileHeaderContainer.setVisibility(View.GONE);
+            } else if (currentFragment instanceof AddPlannerFragment) {
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                bottomNavigationView.setVisibility(View.GONE);
+                profileHeaderContainer.setVisibility(View.GONE);
             } else if (currentFragment instanceof HomeFragment) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(false);
                 bottomNavigationView.setVisibility(View.VISIBLE);
@@ -258,12 +262,11 @@ public class MainActivity extends AppCompatActivity {
             String password = UserPass.getText().toString();
             String Conpassword = UserConPass.getText().toString();
 
-            if(password.equals(Conpassword)){
+            if (password.equals(Conpassword)) {
                 handleRegister(email, password);
                 RegisBottomSheetDialog.dismiss(); // Dismiss the first bottom sheet
-            }
-            else{
-                Toast.makeText(this, "Password is not the same. " , Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Password is not the same. ", Toast.LENGTH_SHORT).show();
             }
 
         });

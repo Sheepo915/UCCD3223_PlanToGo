@@ -109,7 +109,11 @@ public class AttractionFragment extends Fragment {
         ConstraintLayout address = createOverviewInfoCard("Address", location.getAddressObj().getAddressString());
         ConstraintLayout website = null;
         try {
-            website = createOverviewInfoCard("Website", URLDecoder.decode(location.getDetails().getWebsite(), StandardCharsets.UTF_8.name()));
+            String url = location.getDetails().getWebsite();
+
+            if (url != null) {
+                website = createOverviewInfoCard("Website", URLDecoder.decode(url, StandardCharsets.UTF_8.name()));
+            }
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
