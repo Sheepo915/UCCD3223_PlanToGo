@@ -22,6 +22,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.utar.plantogo.internal.APIRequest;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
+import org.w3c.dom.Text;
+
 import java.util.Map;
 import java.util.Objects;
 

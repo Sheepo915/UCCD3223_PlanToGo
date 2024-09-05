@@ -68,7 +68,7 @@ public class APIRequest {
      * @throws Exception if the URL does not start with "https://".
      */
     public APIRequest(String urlString) throws Exception {
-        Pattern urlPattern = Pattern.compile("^https://.+");
+        Pattern urlPattern = Pattern.compile("^http(s?)://.+");
         Matcher matcher = urlPattern.matcher(urlString);
 
         if (!matcher.matches()) {
