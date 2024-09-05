@@ -78,8 +78,8 @@ public class PlannerAddFragment extends Fragment {
     private void savePlan() {
         String title = titleInput.getText().toString();
         String destination = destinationInput.getText().toString();
-        String startDate = startDateInput.getText().toString();  // You may want to use a DatePicker here
-        String endDate = "2023-12-31"; // Placeholder, use a similar EditText or DatePicker for end date
+        String startDate = startDateInput.getText().toString();
+        String endDate = endDateInput.getText().toString();
         String notes = notesInput.getText().toString();
 
         if (title.isEmpty() || destination.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
