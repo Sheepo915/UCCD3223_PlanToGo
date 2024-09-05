@@ -70,10 +70,10 @@
         android:id="@+id/button"
         android:layout_width="271dp"
         android:layout_height="57dp"
-        android:layout_marginBottom="48dp"
         android:text="Start Planning"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextText5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
