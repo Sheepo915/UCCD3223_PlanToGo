@@ -15,7 +15,7 @@ public class PlannerEditComponent extends ConstraintLayout {
     }
 
     private void init(Context context) {
-        inflate(context, R.layout.component_place_edit, this);
+        inflate(context, R.layout.component_plan_edit, this);
     }
 }
 

@@ -31,10 +31,9 @@ public class PlannerEditFragment extends Fragment {
         PlannerEditComponent plannerEditComponent = new PlannerEditComponent(requireContext());
 
 
-        LinearLayout ll = view.findViewById(R.id.ll_nav_tab_container2);
-//        LinearLayout ll2 = view.findViewById(R.id.ll_content_container2);
+        LinearLayout ll = view.findViewById(R.id.test3);
         ll.addView(plannerEditComponent);
-//        ll2.addView(plannerEditComponent);
+
 
 
 
