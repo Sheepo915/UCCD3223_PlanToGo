@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 bottomNavigationView.setVisibility(View.GONE);
                 profileHeaderContainer.setVisibility(View.GONE);
-            } else if (currentFragment instanceof AddPlannerFragment) {
+            } else if (currentFragment instanceof PlannerAddFragment) {
                 getSupportActionBar().setDisplayHomeAsUpEnabled(true);
                 bottomNavigationView.setVisibility(View.GONE);
                 profileHeaderContainer.setVisibility(View.GONE);

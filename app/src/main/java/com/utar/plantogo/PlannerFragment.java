@@ -1,5 +1,6 @@
 package com.utar.plantogo;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -11,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
-import com.utar.plantogo.ui.planner.PlannerAddComponent;
 import com.utar.plantogo.ui.planner.PlannerLinearComponent;
 
 /**
@@ -73,19 +73,34 @@ public class PlannerFragment extends Fragment {
         ll.addView(plannerLinearComponent);
 
 
-        ImageButton imageButton = view.findViewById(R.id.imageButton2);
+        ImageButton imageButton2 = view.findViewById(R.id.imageButton2);
+
+        imageButton2.setOnClickListener(v -> {
+            navigateToPlannerAddFragment();
+        });
+
+        ImageButton imageButton = view.findViewById(R.id.imageButton);
 
         imageButton.setOnClickListener(v -> {
-            navigateToAddPlannerFragment();
+            navigateToPlannerEditFragment();
         });
 
         return view;
     }
 
-    private void navigateToAddPlannerFragment() {
+    private void navigateToPlannerAddFragment() {
         // Navigate to the SearchFragment
         FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.root_fragment_container, new AddPlannerFragment());
+        transaction.replace(R.id.root_fragment_container, new PlannerAddFragment());
+        transaction.addToBackStack(null);
+        // Commit the transaction
+        transaction.commit();
+    }
+
+    private void navigateToPlannerEditFragment() {
+        // Navigate to the SearchFragment
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.root_fragment_container, new PlannerEditFragment());
         transaction.addToBackStack(null);
         // Commit the transaction
         transaction.commit();

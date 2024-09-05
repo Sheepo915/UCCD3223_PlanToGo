@@ -9,16 +9,13 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.ViewModelProvider;
 
 import com.utar.plantogo.ui.planner.PlannerAddComponent;
-import com.utar.plantogo.ui.planner.PlannerLinearComponent;
-import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
+import com.utar.plantogo.ui.planner.PlannerEditComponent;
 
-public class AddPlannerFragment extends Fragment {
+public class PlannerEditFragment extends Fragment {
 
-    public AddPlannerFragment() {
+    public PlannerEditFragment() {
     }
 
     @Override
@@ -29,13 +26,15 @@ public class AddPlannerFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_add_planner, container, false);
-        PlannerAddComponent plannerAddComponent = new PlannerAddComponent(requireContext());
+        View view = inflater.inflate(R.layout.fragment_planner_details, container, false);
+
+        PlannerEditComponent plannerEditComponent = new PlannerEditComponent(requireContext());
 
 
-
-        LinearLayout ll = view.findViewById(R.id.test2);
-        ll.addView(plannerAddComponent);
+        LinearLayout ll = view.findViewById(R.id.ll_nav_tab_container2);
+//        LinearLayout ll2 = view.findViewById(R.id.ll_content_container2);
+        ll.addView(plannerEditComponent);
+//        ll2.addView(plannerEditComponent);
 
 
 
@@ -44,3 +43,4 @@ public class AddPlannerFragment extends Fragment {
 
 
 }
+
