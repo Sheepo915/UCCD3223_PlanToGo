@@ -284,7 +284,7 @@ public class MainActivity extends AppCompatActivity {
         loginBottomSheetDialog.setContentView(loginSheetView);
 
         // Get references to the inputs and button
-        TextInputEditText UserName = loginSheetView.findViewById(R.id.ti_login_email);
+        TextInputEditText LoginEmail = loginSheetView.findViewById(R.id.ti_login_email);
         TextInputEditText LoginPassword = loginSheetView.findViewById(R.id.ti_login_password);
         Button LoginBtn = loginSheetView.findViewById(R.id.btn_login);
         TextView RegisBTN = loginSheetView.findViewById(R.id.btn_register);
@@ -292,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
         // Set onClick listener for the confirm login button
         LoginBtn.setOnClickListener(v -> {
             // Handle login confirmation logic here
-            String username = UserName.getText().toString();
+            String username = LoginEmail.getText().toString();
             String loginPassword = LoginPassword.getText().toString();
             handleLogin(username, loginPassword);
             loginBottomSheetDialog.dismiss(); // Dismiss the login bottom sheet
@@ -308,12 +308,45 @@ public class MainActivity extends AppCompatActivity {
         loginBottomSheetDialog.show();
     }
 
-    private void handleLogin(String username, String password) {
-        // Perform login actions (e.g., validate credentials against Supabase or local storage)
-        // Placeholder: Show a toast for now
-        Toast.makeText(this, "Logging in with: " + username, Toast.LENGTH_SHORT).show();
+    private void handleLogin(String email, String password) {
+        try {
+            // Construct the APIRequest object with the Supabase token URL
+            APIRequest apiRequest = new APIRequest(SUPABASE_BASE_URL + "/auth/v1/token?grant_type=password");
 
-        // Navigate to the main activity or perform desired action on successful login
+            // Set the request method to POST
+            apiRequest.setRequestMethod(APIRequest.REQUEST_METHOD.POST);
+
+            // Construct the JSON body for login
+            String jsonBody = String.format("{\"email\": \"%s\", \"password\": \"%s\", \"grant_type\": \"password\"}", email, password);
+            apiRequest.setRequestBody(jsonBody);
+
+            // Add required headers
+            apiRequest.addHeader("Content-Type", "application/json");
+            apiRequest.addHeader("apikey", SUPABASE_KEY);
+
+
+            // Make the request and handle the response
+            apiRequest.makeRequest(new APIRequest.ResponseCallback() {
+                @Override
+                public void onSuccess(Map<String, Object> responseMap) {
+                    // Handle successful login
+                    System.out.println("Login successful: " + responseMap.toString());
+                    // Store user session data or move to the next screen
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    // Handle errors
+                    e.printStackTrace();
+                    System.out.println("Login failed: " + e.getMessage());
+                    // Show error message
+                }
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Error initializing APIRequest: " + e.getMessage());
+        }
     }
 
     private void handleRegister(String email, String password) {
@@ -332,6 +365,7 @@ public class MainActivity extends AppCompatActivity {
                 public void onSuccess(Map<String, Object> responseMap) {
                     // Handle successful registration
                     Log.d("SupabaseAuth", "Registration successful: " + responseMap.toString());
+                    showLoginBottomSheet();
                 }
 
                 @Override
