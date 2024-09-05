@@ -6,10 +6,12 @@
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="412dp"
+        android:layout_height="730dp"
         android:background="@color/background"
-        android:nestedScrollingEnabled="true">
+        android:nestedScrollingEnabled="true"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:id="@+id/ll_nav_tab_container2"
@@ -19,9 +21,6 @@
             android:elevation="2dp"
             android:paddingHorizontal="10dp"
             android:paddingVertical="14dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/cl_top_section_container"
             tools:ignore="NotSibling">
 
             <TextView
@@ -42,121 +41,137 @@
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <ScrollView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/background"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
+            android:layout_width="413dp"
+            android:layout_height="76dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ll_nav_tab_container2"
-            app:layout_constraintVertical_bias="0.0">
+            app:layout_constraintTop_toBottomOf="@+id/ll_nav_tab_container2">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/ll_content_container2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
-                android:background="@color/background"
-                android:divider="@drawable/horizontal_divider"
-                android:orientation="vertical"
-                android:padding="10dp"
-                android:showDividers="middle"
-                app:layout_constraintBottom_toBottomOf="@+id/tv_attraction_list_name"
-                app:layout_constraintTop_toBottomOf="@+id/tv_attraction_list_name">
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="127dp"
+                android:layout_height="34dp"
+                android:fontFamily="sans-serif-black"
+                android:text="Plan To Go"
+                android:textSize="24sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <RelativeLayout
+                android:layout_width="188dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="40dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView7"
+                app:layout_constraintVertical_bias="1.0">
 
                 <ImageView
-                    android:id="@+id/iv_attraction_list_img"
-                    android:layout_width="122dp"
-                    android:layout_height="105dp"
-                    android:layout_marginStart="20dp"
-                    android:background="@drawable/rounded_rect"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintDimensionRatio="4:3"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="1.0"
-                    tools:layout_conversion_absoluteHeight="120dp"
-                    tools:layout_conversion_absoluteWidth="376dp" />
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/baseline_location_on_24" />
 
                 <TextView
-                    android:id="@+id/tv_attraction_location"
-                    android:layout_width="154dp"
-                    android:layout_height="30dp"
-                    android:layout_marginStart="28dp"
-                    android:text="Country Name"
-                    android:textSize="12sp"
-                    app:layout_constraintStart_toEndOf="@+id/iv_attraction_list_img"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_attraction_list_name"
-                    tools:layout_conversion_absoluteHeight="19dp"
-                    tools:layout_conversion_absoluteWidth="371dp" />
-
-                <TextView
-                    android:id="@+id/tv_attraction_list_name"
-                    android:layout_width="154dp"
-                    android:layout_height="22dp"
-                    android:layout_marginStart="28dp"
-                    android:layout_marginTop="4dp"
-                    android:text="Title"
-                    app:layout_constraintStart_toEndOf="@+id/iv_attraction_list_img"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2"
-                    tools:layout_conversion_absoluteHeight="19dp"
-                    tools:layout_conversion_absoluteWidth="371dp" />
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="154dp"
-                    android:layout_height="41dp"
-                    android:layout_marginStart="28dp"
-                    android:text="Notes"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/iv_attraction_list_img"
-                    app:layout_constraintTop_toBottomOf="@+id/tv_attraction_location"
-                    app:layout_constraintVertical_bias="0.0"
-                    tools:layout_conversion_absoluteHeight="44dp"
-                    tools:layout_conversion_absoluteWidth="371dp" />
-
-                <TextView
-                    android:id="@+id/textView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="4dp"
-                    android:text="1"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_conversion_absoluteHeight="19dp"
-                    tools:layout_conversion_absoluteWidth="392dp" />
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="50dp"
+                    android:clickable="true"
+                    android:hint="Add a place"
+                    android:textAlignment="center"
+                    android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textView2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Date"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:layout_conversion_absoluteHeight="18dp"
-                    tools:layout_conversion_absoluteWidth="392dp"
-                    tools:layout_editor_absoluteX="10dp"
-                    tools:layout_editor_absoluteY="310dp" />
+            </RelativeLayout>
 
-                <ImageButton
-                    android:id="@+id/imageButton"
-                    android:layout_width="22dp"
-                    android:layout_height="25dp"
-                    android:layout_marginBottom="4dp"
-                    android:src="@android:drawable/btn_star"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/textView"
-                    tools:layout_conversion_absoluteHeight="30dp"
-                    tools:layout_conversion_absoluteWidth="384dp" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/ll_content_container2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:background="@color/background"
+            android:padding="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
-        </ScrollView>
+            <ImageView
+                android:id="@+id/iv_attraction_list_img"
+                android:layout_width="122dp"
+                android:layout_height="105dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/rounded_rect"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintDimensionRatio="4:3"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <TextView
+                android:id="@+id/tv_attraction_location"
+                android:layout_width="154dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="28dp"
+                android:text="Country Name"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/iv_attraction_list_img"
+                app:layout_constraintTop_toBottomOf="@+id/tv_attraction_list_name" />
+
+            <TextView
+                android:id="@+id/tv_attraction_list_name"
+                android:layout_width="154dp"
+                android:layout_height="22dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="4dp"
+                android:text="Title"
+                app:layout_constraintStart_toEndOf="@+id/iv_attraction_list_img"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="154dp"
+                android:layout_height="41dp"
+                android:layout_marginStart="28dp"
+                android:text="Notes"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/iv_attraction_list_img"
+                app:layout_constraintTop_toBottomOf="@+id/tv_attraction_location"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
+                android:text="1"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="22dp"
+                android:layout_height="25dp"
+                android:layout_marginBottom="4dp"
+                android:src="@android:drawable/btn_star"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/textView" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
