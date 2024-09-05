@@ -34,7 +34,7 @@
             android:layout_width="77dp"
             android:layout_height="wrap_content"
             android:elevation="10dp"
-            android:src="@android:drawable/btn_star"
+            android:src="@android:drawable/btn_plus"
             android:layout_margin="6dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"/>

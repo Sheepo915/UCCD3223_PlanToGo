@@ -1,5 +1,6 @@
 package com.utar.plantogo;
 
+import android.app.DatePickerDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,16 +16,22 @@ import androidx.fragment.app.Fragment;
 
 import com.utar.plantogo.ui.planner.PlannerAddComponent;
 
+import java.util.Calendar;
+
 public class PlannerAddFragment extends Fragment {
 
     public PlannerAddFragment() {
     }
 
     private EditText titleInput, destinationInput, startDateInput, endDateInput, notesInput;
+    private Calendar calendar;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+        calendar = Calendar.getInstance();
     }
 
     @Nullable
@@ -35,8 +42,15 @@ public class PlannerAddFragment extends Fragment {
 
         titleInput = plannerAddComponent.findViewById(R.id.editTextText);
         destinationInput = plannerAddComponent.findViewById(R.id.editTextText2);
-        startDateInput = plannerAddComponent.findViewById(R.id.editTextDate); // This is only for one date, you can create another input for the end date.
+        startDateInput = plannerAddComponent.findViewById(R.id.editTextStartDate);
+        endDateInput = plannerAddComponent.findViewById(R.id.editTextEndDate); // End date field
         notesInput = plannerAddComponent.findViewById(R.id.editTextText5);
+
+        // Set DatePicker for start date
+        startDateInput.setOnClickListener(v -> showDatePickerDialog(startDateInput));
+
+        // Set DatePicker for end date
+        endDateInput.setOnClickListener(v -> showDatePickerDialog(endDateInput));
 
         Button startPlanningButton = plannerAddComponent.findViewById(R.id.button);
         startPlanningButton.setOnClickListener(v -> savePlan());
@@ -48,11 +62,24 @@ public class PlannerAddFragment extends Fragment {
         return view;
     }
 
+    private void showDatePickerDialog(final EditText dateInput) {
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
+                (view, yearSelected, monthSelected, dayOfMonthSelected) -> {
+                    String selectedDate = dayOfMonthSelected + "/" + (monthSelected + 1) + "/" + yearSelected;
+                    dateInput.setText(selectedDate);
+                }, year, month, day);
+        datePickerDialog.show();
+    }
+
     private void savePlan() {
         String title = titleInput.getText().toString();
         String destination = destinationInput.getText().toString();
-        String startDate = startDateInput.getText().toString();  // You may want to use a DatePicker here
-        String endDate = "2023-12-31"; // Placeholder, use a similar EditText or DatePicker for end date
+        String startDate = startDateInput.getText().toString();
+        String endDate = endDateInput.getText().toString();
         String notes = notesInput.getText().toString();
 
         if (title.isEmpty() || destination.isEmpty() || startDate.isEmpty() || endDate.isEmpty()) {
