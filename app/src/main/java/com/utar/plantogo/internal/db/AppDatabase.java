@@ -14,6 +14,11 @@ import com.utar.plantogo.internal.db.model.PlannedTrips;
 import com.utar.plantogo.internal.db.model.PlannedTripsDetails;
 import com.utar.plantogo.internal.db.typeconverter.LocationJSONConverter;
 
+/**
+ * <h2>Application Database with Room database</h2>
+ * <p>Singleton implementation of the database.</p>
+ * <p>Use getInstance(Context context) to retrieve the database instance</p>
+ */
 @Database(entities = {Location.class, PlannedTripsDetails.class, PlannedTrips.class}, version = 1)
 @TypeConverters({LocationJSONConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
@@ -23,13 +28,19 @@ public abstract class AppDatabase extends RoomDatabase {
     public abstract LocationDao locationDao();
     public abstract PlannedTripsDao plannedTripsDao();
 
+    /**
+     * Singleton implementation of application database.
+     * <p>Use getInstance to initialize the database in MainActivity</p>
+     * @param context Application context, use MainActivity
+     * @return Database instance
+     */
     public static AppDatabase getInstance(Context context) {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AppDatabase.class, "plantogo_database")
-                            .fallbackToDestructiveMigration() // Optional: for schema changes without migration
+                            .fallbackToDestructiveMigration()
                             .build();
                 }
             }

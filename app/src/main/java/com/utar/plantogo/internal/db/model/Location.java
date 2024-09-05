@@ -16,7 +16,7 @@ public class Location {
 
     @TypeConverters(LocationJSONConverter.class)
     @ColumnInfo(name = "location_details")
-    public Location location;
+    public com.utar.plantogo.internal.tripadvisor.model.Location location;
 
     @ColumnInfo(name = "created_at")
     public String createdAt;

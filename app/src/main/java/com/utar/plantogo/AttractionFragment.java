@@ -6,13 +6,15 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.URLSpan;
-import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -21,6 +23,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.utar.plantogo.internal.db.AppDatabase;
 import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.internal.tripadvisor.model.Photo;
 import com.utar.plantogo.internal.tripadvisor.model.Review;
@@ -33,6 +37,7 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -84,6 +89,9 @@ public class AttractionFragment extends Fragment {
 
         TextView review = view.findViewById(R.id.tv_review);
 
+        Button addToTrip = view.findViewById(R.id.btn_add_to_trip);
+        addToTrip.setOnClickListener(v -> showBottomSheet());
+
         // Initiate photo carousel
         carouselContainer = view.findViewById(R.id.fl_carousel_container);
         carouselRecyclerView = new RecyclerView(requireContext());
@@ -111,6 +119,47 @@ public class AttractionFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void showBottomSheet() {
+        BottomSheetDialog tripsDialog = new BottomSheetDialog(requireContext());
+        tripsDialog.setContentView(R.layout.layout_trips_bottom_sheet);
+
+        ImageButton modalCollapseButton = tripsDialog.findViewById(R.id.ib_modal_collapse);
+        Objects.requireNonNull(modalCollapseButton).setOnClickListener(x -> {
+            tripsDialog.dismiss();
+        });
+
+        AppDatabase db = AppDatabase.getInstance(requireContext());
+        new Thread(() -> {
+            int tripCount = db.plannedTripsDao().getTripsCount();
+            ScrollView scrollView = tripsDialog.findViewById(R.id.sv_planner_list_modal_container);
+
+            // Run on the main thread to update UI
+            requireActivity().runOnUiThread(() -> {
+                if (tripCount == 0) {
+                    View noTripsLayout = LayoutInflater.from(requireContext()).inflate(R.layout.component_bottom_sheet_no_planned_trips, null);
+
+                    if (scrollView != null) {
+                        scrollView.addView(noTripsLayout);
+                    }
+                } else {
+                    List<String> plannedTrips = db.plannedTripsDao().getAllTripsName();
+
+                    for (String name : plannedTrips) {
+                        TextView textView = new TextView(requireContext());
+                        textView.setText(name);
+
+                        if (scrollView != null) {
+                            scrollView.addView(textView);
+                        }
+                    }
+                }
+            });
+        }).start();
+
+
+        tripsDialog.show();
     }
 
     private void instantiateOverviewContent(LinearLayout contentContainer) {
