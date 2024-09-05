@@ -7,24 +7,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.utar.plantogo.ui.planner.PlannerAddComponent;
+import com.utar.plantogo.internal.db.AppDatabase;
+import com.utar.plantogo.internal.db.model.PlannedTrips;
 
 import java.util.Calendar;
 
 public class PlannerAddFragment extends Fragment {
 
-    public PlannerAddFragment() {
-    }
-
     private EditText titleInput, destinationInput, startDateInput, endDateInput, notesInput;
     private Calendar calendar;
+
+    public PlannerAddFragment() {
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -38,13 +38,12 @@ public class PlannerAddFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_add_planner, container, false);
-        PlannerAddComponent plannerAddComponent = new PlannerAddComponent(requireContext());
 
-        titleInput = plannerAddComponent.findViewById(R.id.editTextText);
-        destinationInput = plannerAddComponent.findViewById(R.id.editTextText2);
-        startDateInput = plannerAddComponent.findViewById(R.id.editTextStartDate);
-        endDateInput = plannerAddComponent.findViewById(R.id.editTextEndDate); // End date field
-        notesInput = plannerAddComponent.findViewById(R.id.editTextText5);
+        titleInput = view.findViewById(R.id.ti_trip_name);
+        destinationInput = view.findViewById(R.id.ti_location);
+        startDateInput = view.findViewById(R.id.ti_start_date);
+        endDateInput = view.findViewById(R.id.ti_end_date);
+        notesInput = view.findViewById(R.id.ti_notes);
 
         // Set DatePicker for start date
         startDateInput.setOnClickListener(v -> showDatePickerDialog(startDateInput));
@@ -52,12 +51,8 @@ public class PlannerAddFragment extends Fragment {
         // Set DatePicker for end date
         endDateInput.setOnClickListener(v -> showDatePickerDialog(endDateInput));
 
-        Button startPlanningButton = plannerAddComponent.findViewById(R.id.button);
+        Button startPlanningButton = view.findViewById(R.id.btn_add_trip);
         startPlanningButton.setOnClickListener(v -> savePlan());
-
-        LinearLayout ll = view.findViewById(R.id.test2);
-        ll.addView(plannerAddComponent);
-
 
         return view;
     }
@@ -67,11 +62,10 @@ public class PlannerAddFragment extends Fragment {
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(),
-                (view, yearSelected, monthSelected, dayOfMonthSelected) -> {
-                    String selectedDate = dayOfMonthSelected + "/" + (monthSelected + 1) + "/" + yearSelected;
-                    dateInput.setText(selectedDate);
-                }, year, month, day);
+        DatePickerDialog datePickerDialog = new DatePickerDialog(requireContext(), (view, yearSelected, monthSelected, dayOfMonthSelected) -> {
+            String selectedDate = dayOfMonthSelected + "/" + (monthSelected + 1) + "/" + yearSelected;
+            dateInput.setText(selectedDate);
+        }, year, month, day);
         datePickerDialog.show();
     }
 
@@ -87,8 +81,16 @@ public class PlannerAddFragment extends Fragment {
             return;
         }
 
-        Toast.makeText(requireContext(), "Plan Saved", Toast.LENGTH_SHORT).show();
+        AppDatabase db = AppDatabase.getInstance(requireContext());
+        new Thread(() -> {
+            PlannedTrips plannedTrips = new PlannedTrips(title, destination, startDate, endDate, notes);
 
+            db.plannedTripsDao().insertPlannedTrip(plannedTrips);
+
+            requireActivity().runOnUiThread(() -> {
+                Toast.makeText(requireContext(), "Plan Saved", Toast.LENGTH_SHORT).show();
+            });
+        }).start();
 
     }
 }

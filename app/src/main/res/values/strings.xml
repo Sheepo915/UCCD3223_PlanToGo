@@ -36,4 +36,11 @@
     <string name="select_trip_to_be_added">Select Trip to be Added</string>
     <string name="collapse_modal">collapse modal</string>
     <string name="location">Location</string>
+    <string name="add_trip_header">Build an itinerary and map out your upcoming travel plans</string>
+    <string name="trip_name">Trip Name</string>
+    <string name="where_are_you_heading">Where are you heading? eg: Malaysia,Japan...</string>
+    <string name="start_date">Start date</string>
+    <string name="end_date">End date</string>
+    <string name="notes_reminder">Notes. any reminder?</string>
+    <string name="start_planning">Start Planning</string>
 </resources>

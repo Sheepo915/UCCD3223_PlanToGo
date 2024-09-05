@@ -20,7 +20,7 @@ public interface PlannedTripsDao {
     void insertPlannedTrip(PlannedTrips plannedTrips);
 
     @Insert
-    void insertPlannedTripDetails(PlannedTripsDetails tripDetails);
+    void insertPlannedTripDetails(PlannedTripsDetails... tripDetails);
 
     @Update
     void updatePlannedTrip(PlannedTrips plannedTrips);

@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.utar.plantogo.ui.planner.PlannerAddComponent;
 import com.utar.plantogo.ui.planner.PlannerEditComponent;
 
 public class PlannerEditFragment extends Fragment {

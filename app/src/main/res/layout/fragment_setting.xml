@@ -41,14 +41,14 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/rounded_rect"
+                android:background="@drawable/shape_rounded_rect"
                 android:paddingEnd="20dp"
                 android:paddingStart="20dp"
                 android:text="Edit Account"
                 android:textAllCaps="false"/>
 
             <LinearLayout
-                android:background="@drawable/rounded_rect"
+                android:background="@drawable/shape_rounded_rect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
@@ -122,7 +122,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_rect"
+                android:background="@drawable/shape_rounded_rect"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
@@ -197,7 +197,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/rounded_rect"
+                android:background="@drawable/shape_rounded_rect"
                 android:layout_marginStart="20dp"
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="20dp"
