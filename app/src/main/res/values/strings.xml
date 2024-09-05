@@ -29,7 +29,6 @@
     <string name="username">UserName</string>
     <string name="night_mode">Night Mode</string>
     <string name="help">Help</string>
-    <string name="term_condition"><![CDATA[Term & condition]]></string>
-    <string name="report_bug">Report Bug</string>
+    <string name="term_condition"><![CDATA[Terms & Conditions]]></string>
     <string name="user_name">User Name</string>
 </resources>

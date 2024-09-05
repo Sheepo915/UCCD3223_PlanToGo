@@ -7,11 +7,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +32,7 @@ public class SettingFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Switch NightSwitch, NotisSwitch;
+    private ImageView Help, Terms;
 
     public SettingFragment() {
         // Required empty public constructor
@@ -69,6 +73,13 @@ public class SettingFragment extends Fragment {
 
         NightSwitch = view.findViewById(R.id.S_Night);
         NotisSwitch = view.findViewById(R.id.S_Notis);
+
+        Help = view.findViewById(R.id.IV_Help);
+        Terms = view.findViewById(R.id.IV_Term);
+
+
+        Help.setOnClickListener(v -> navigateToFragment(new HelpFragment()));
+        Terms.setOnClickListener(v -> navigateToFragment(new TermsAndConditionsFragment()));
 
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -114,5 +125,13 @@ public class SettingFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void navigateToFragment(Fragment fragment) {
+        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.root_fragment_container, fragment); // Replace with your container ID
+        fragmentTransaction.addToBackStack(null); // Add this transaction to the back stack
+        fragmentTransaction.commit();
     }
 }
