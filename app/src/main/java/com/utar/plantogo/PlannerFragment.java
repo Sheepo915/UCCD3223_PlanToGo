@@ -3,10 +3,15 @@ package com.utar.plantogo;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+
+import com.utar.plantogo.ui.planner.PlannerLinearComponent;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,9 +65,29 @@ public class PlannerFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_planner, container, false);
+        PlannerLinearComponent plannerLinearComponent = new PlannerLinearComponent(requireContext());
+
+
+        LinearLayout ll = view.findViewById(R.id.test);
+        ll.addView(plannerLinearComponent);
+
+
+        ImageButton imageButton = view.findViewById(R.id.imageButton2);
+
+        imageButton.setOnClickListener(v -> {
+            navigateToAddPlannerFragment();
+        });
 
         return view;
     }
 
+    private void navigateToAddPlannerFragment() {
+        // Navigate to the SearchFragment
+        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+        transaction.replace(R.id.root_fragment_container, new AddPlannerFragment());
+        transaction.addToBackStack(null);
+        // Commit the transaction
+        transaction.commit();
+    }
 
 }

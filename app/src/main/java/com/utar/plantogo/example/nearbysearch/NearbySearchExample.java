@@ -42,7 +42,7 @@ public class NearbySearchExample {
         Callable<List<Location>> callable = () -> {
             try {
                 // Simulate network delay
-                TimeUnit.SECONDS.sleep(2); // 2 seconds delay
+//                TimeUnit.SECONDS.sleep(2); // 2 seconds delay
                 String jsonContent;
 
                 // Load the JSON file from the assets directory
