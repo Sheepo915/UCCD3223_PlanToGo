@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.utar.plantogo.internal.tripadvisor.TripAdvisor;
 import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.ui.RecyclerViewItemDecoration;
 import com.utar.plantogo.ui.attraction.AttractionListAdapter;
@@ -61,6 +62,7 @@ public class SearchFragment extends Fragment {
 
         if (getArguments() != null) {
             searchQuery = getArguments().getString(SEARCH_QUERY);
+
         }
         fragmentViewModel = new ViewModelProvider(requireActivity()).get(FragmentViewModel.class);
     }

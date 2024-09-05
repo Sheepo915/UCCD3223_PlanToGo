@@ -16,6 +16,7 @@ public class FragmentViewModel extends ViewModel {
     private final MutableLiveData<Location> selectedLocation = new MutableLiveData<>();
     private List<Location> preloadData = null;
 
+
     public LiveData<Location> getSelectedLocation() {
         return selectedLocation;
     }

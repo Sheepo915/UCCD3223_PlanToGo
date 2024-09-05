@@ -1,6 +1,7 @@
 package com.utar.plantogo;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
@@ -18,6 +19,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -30,6 +32,7 @@ import com.utar.plantogo.internal.tripadvisor.model.Photo;
 import com.utar.plantogo.internal.tripadvisor.model.Review;
 import com.utar.plantogo.ui.RecyclerViewItemDecoration;
 import com.utar.plantogo.ui.carousel.CarouselPhotoAdapter;
+import com.utar.plantogo.ui.googlemap.MapComponent;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 import java.io.UnsupportedEncodingException;
@@ -182,7 +185,7 @@ public class AttractionFragment extends Fragment {
         }
 
         // Instantiate static map
-
+        contentContainer.addView(createOverviewStaticMapInfoItem(location.getDetails().getLatitude(), location.getDetails().getLongitude()));
     }
 
     private void instantiateReviewContent(LinearLayout contentContainer) {
@@ -240,6 +243,48 @@ public class AttractionFragment extends Fragment {
         } else {
             cardContent.setText(content);
         }
+
+        return constraintLayout;
+    }
+
+    protected ConstraintLayout createOverviewStaticMapInfoItem(String latitude, String longitude) {
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        ConstraintLayout constraintLayout = new ConstraintLayout(requireContext());
+        constraintLayout.setLayoutParams(layoutParams);
+        constraintLayout.setPadding(6, 6, 6, 6);
+
+        TextView tvCardTitle = new TextView(requireContext());
+        tvCardTitle.setId(ConstraintLayout.generateViewId());
+        tvCardTitle.setTypeface(null, Typeface.BOLD);
+        tvCardTitle.setText(R.string.location);
+        constraintLayout.addView(tvCardTitle);
+
+        MapComponent mapComponent = new MapComponent(requireContext(), Float.parseFloat(latitude), Float.parseFloat(longitude));
+        mapComponent.setId(MapComponent.generateViewId());
+        constraintLayout.addView(mapComponent);
+
+        // Set LayoutParams
+        ConstraintLayout.LayoutParams titleParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        tvCardTitle.setLayoutParams(titleParams);
+
+        ConstraintLayout.LayoutParams contentParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, 0);
+        contentParams.topToBottom = tvCardTitle.getId();
+        contentParams.topMargin = 6;
+        mapComponent.setLayoutParams(contentParams);
+
+        // Apply constraints
+        ConstraintSet constraintSet = new ConstraintSet();
+        constraintSet.clone(constraintLayout);
+
+        constraintSet.connect(tvCardTitle.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+        constraintSet.connect(tvCardTitle.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+        constraintSet.connect(tvCardTitle.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+
+        constraintSet.connect(mapComponent.getId(), ConstraintSet.TOP, tvCardTitle.getId(), ConstraintSet.BOTTOM);
+        constraintSet.connect(mapComponent.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+        constraintSet.connect(mapComponent.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+        constraintSet.connect(mapComponent.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+        constraintSet.applyTo(constraintLayout);
 
         return constraintLayout;
     }

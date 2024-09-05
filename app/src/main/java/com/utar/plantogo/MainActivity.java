@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String SUPABASE_BASE_URL = BuildConfig.SUPABASE_BASE_URL;
     private static final String SUPABASE_KEY = BuildConfig.SUPABASE_API_KEY;
+    private static final int REQUEST_LOCATION_PERMISSION = 1;
     private final Handler handler = new Handler(Looper.getMainLooper());
     private Toolbar toolbar;
     private BottomNavigationView bottomNavigationView;
@@ -252,16 +253,16 @@ public class MainActivity extends AppCompatActivity {
         TextInputEditText userEmail = bottomSheetView.findViewById(R.id.ti_user_email);
         TextInputEditText userPassword = bottomSheetView.findViewById(R.id.ti_user_password);
         TextInputEditText userConfirmPassword = bottomSheetView.findViewById(R.id.ti_user_confirm_password);
-        TextView Login = bottomSheetView.findViewById(R.id.btn_login);
-        Button RegisBtn = bottomSheetView.findViewById(R.id.btn_register);
+        TextView loginButton = bottomSheetView.findViewById(R.id.btn_login);
+        Button registerButton = bottomSheetView.findViewById(R.id.btn_register);
 
-        Login.setOnClickListener(v -> {
+        loginButton.setOnClickListener(v -> {
             // Show the second bottom sheet for login
             showLoginBottomSheet();
             registerBottomSheetDialog.dismiss(); // Dismiss the first bottom sheet
         });
 
-        RegisBtn.setOnClickListener(v -> {
+        registerButton.setOnClickListener(v -> {
             // Handle registration logic here
             String email = Objects.requireNonNull(userEmail.getText()).toString();
             String password = Objects.requireNonNull(userPassword.getText()).toString();

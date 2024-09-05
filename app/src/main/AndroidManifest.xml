@@ -16,9 +16,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PlanToGo"
-        tools:targetApi="31"
-        android:windowSoftInputMode="stateVisible|adjustPan">
-        <activity
+        android:windowSoftInputMode="stateVisible|adjustPan"
+        tools:targetApi="31">
+
+    <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

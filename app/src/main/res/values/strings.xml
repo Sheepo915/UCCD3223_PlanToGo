@@ -35,4 +35,5 @@
     <string name="save">Save</string>
     <string name="select_trip_to_be_added">Select Trip to be Added</string>
     <string name="collapse_modal">collapse modal</string>
+    <string name="location">Location</string>
 </resources>
