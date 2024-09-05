@@ -1,6 +1,12 @@
 package com.utar.plantogo;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.URLSpan;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +33,8 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -165,8 +173,21 @@ public class AttractionFragment extends Fragment {
         TextView cardTitle = constraintLayout.findViewById(R.id.tv_card_title);
         TextView cardContent = constraintLayout.findViewById(R.id.tv_card_content);
 
+        Pattern urlPattern = Pattern.compile("^http(s?)://.+");
+        Matcher matcher = urlPattern.matcher(content);
+
         cardTitle.setText(title);
-        cardContent.setText(content);
+        if (matcher.matches()) {
+            SpannableString url = new SpannableString(content);
+            url.setSpan(new URLSpan(content), 0, url.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            cardContent.setText(url);
+            cardContent.setOnClickListener(v -> {
+                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(content));
+                startActivity(browserIntent);
+            });
+        } else {
+            cardContent.setText(content);
+        }
 
         return constraintLayout;
     }
