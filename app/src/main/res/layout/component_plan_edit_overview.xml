@@ -57,19 +57,19 @@
             tools:ignore="NotSibling">
 
             <TextView
-                android:id="@+id/tv_overview"
+                android:id="@+id/tv_overview1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="26dp"
-                android:text="@string/overview"
+                android:text="Overview"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tv_review"
+                android:id="@+id/tv_itinerary"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/reviews"
+                android:text="Itinerary"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
         </LinearLayout>
