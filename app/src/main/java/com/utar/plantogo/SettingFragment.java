@@ -12,6 +12,7 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -33,6 +34,7 @@ public class SettingFragment extends Fragment {
     private String mParam2;
     private Switch NightSwitch, NotisSwitch;
     private ImageView Help, Terms;
+    private AppCompatButton Edit;
 
     public SettingFragment() {
         // Required empty public constructor
@@ -76,10 +78,12 @@ public class SettingFragment extends Fragment {
 
         Help = view.findViewById(R.id.IV_Help);
         Terms = view.findViewById(R.id.IV_Term);
+        Edit = view.findViewById(R.id.EditAccBTN);
 
 
         Help.setOnClickListener(v -> navigateToFragment(new HelpFragment()));
         Terms.setOnClickListener(v -> navigateToFragment(new TermsAndConditionsFragment()));
+        Edit.setOnClickListener(v -> navigateToFragment(new EditAccountFragment()));
 
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
