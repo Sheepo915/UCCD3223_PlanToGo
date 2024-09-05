@@ -9,8 +9,8 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/gray_green">
+        android:layout_height="match_parent">
+
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -65,7 +65,7 @@
                         android:id="@+id/NightmodeIcon"
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/dark_mode" />
+                        android:src="@drawable/outline_dark_mode_24" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -95,7 +95,7 @@
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/notifications_24" />
+                        android:src="@drawable/baseline_notifications_none_24" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -136,7 +136,7 @@
                     <ImageView
                         android:layout_width="35dp"
                         android:layout_height="35dp"
-                        android:src="@drawable/help_24" />
+                        android:src="@drawable/baseline_help_outline_24" />
 
                     <TextView
                         android:layout_width="wrap_content"
