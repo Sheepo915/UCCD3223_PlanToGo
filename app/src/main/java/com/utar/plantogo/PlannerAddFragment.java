@@ -33,12 +33,12 @@ public class PlannerAddFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_add_planner, container, false);
         PlannerAddComponent plannerAddComponent = new PlannerAddComponent(requireContext());
 
-        titleInput = view.findViewById(R.id.editTextText);
-        destinationInput = view.findViewById(R.id.editTextText2);
-        startDateInput = view.findViewById(R.id.editTextDate); // This is only for one date, you can create another input for the end date.
-        notesInput = view.findViewById(R.id.editTextText5);
+        titleInput = plannerAddComponent.findViewById(R.id.editTextText);
+        destinationInput = plannerAddComponent.findViewById(R.id.editTextText2);
+        startDateInput = plannerAddComponent.findViewById(R.id.editTextDate); // This is only for one date, you can create another input for the end date.
+        notesInput = plannerAddComponent.findViewById(R.id.editTextText5);
 
-        Button startPlanningButton = view.findViewById(R.id.button);
+        Button startPlanningButton = plannerAddComponent.findViewById(R.id.button);
         startPlanningButton.setOnClickListener(v -> savePlan());
 
         LinearLayout ll = view.findViewById(R.id.test2);
