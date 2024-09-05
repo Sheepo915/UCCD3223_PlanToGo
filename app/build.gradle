@@ -69,4 +69,8 @@ dependencies {
 
     // Google Map SDK
     implementation libs.play.services.maps
+
+    // Room database
+    implementation libs.room.runtime
+    annotationProcessor libs.room.compiler
 }
