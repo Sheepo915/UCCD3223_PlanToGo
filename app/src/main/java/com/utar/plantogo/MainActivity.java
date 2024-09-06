@@ -111,26 +111,20 @@ public class MainActivity extends AppCompatActivity {
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.root_fragment_container);
 
-            if (currentFragment instanceof AttractionFragment) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                bottomNavigationView.setVisibility(View.GONE);
-                profileHeaderContainer.setVisibility(View.GONE);
-            } else if (currentFragment instanceof SearchFragment) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                bottomNavigationView.setVisibility(View.GONE);
-                profileHeaderContainer.setVisibility(View.GONE);
-            } else if (currentFragment instanceof PlannerAddFragment) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-                bottomNavigationView.setVisibility(View.GONE);
-                profileHeaderContainer.setVisibility(View.GONE);
-            } else if (currentFragment instanceof HomeFragment) {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+            if (isRootPage(currentFragment)) {
+                if (currentFragment instanceof HomeFragment) {
+                    profileHeaderContainer.setVisibility(View.VISIBLE);
+                } else {
+                    profileHeaderContainer.setVisibility(View.GONE);
+                }
                 bottomNavigationView.setVisibility(View.VISIBLE);
-                profileHeaderContainer.setVisibility(View.VISIBLE);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
             } else {
-                getSupportActionBar().setDisplayHomeAsUpEnabled(false);
-                bottomNavigationView.setVisibility(View.VISIBLE);
+                profileHeaderContainer.setVisibility(View.GONE);
+                bottomNavigationView.setVisibility(View.GONE);
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             }
+
         });
 
         loginText.setOnClickListener(new View.OnClickListener() {
@@ -163,6 +157,9 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    private boolean isRootPage(Fragment fragment) {
+        return fragment instanceof HomeFragment || fragment instanceof PlannerFragment || fragment instanceof SettingFragment;
+    }
 
     /**
      * This is a wrapper for navigation between fragments

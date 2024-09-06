@@ -126,7 +126,7 @@ public class HomeFragment extends Fragment {
 
     private void setupAttractionList(List<Location> data) {
         // Set the LayoutManager
-//        attractionListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        attractionListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Create and set the adapter
         AttractionListAdapter adapter = new AttractionListAdapter(getContext(), data, getParentFragmentManager(), fragmentViewModel);
