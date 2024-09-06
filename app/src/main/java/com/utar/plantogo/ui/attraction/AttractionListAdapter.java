@@ -40,7 +40,6 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Location location = data.get(position);
 
-
         holder.attractionListComponent.setAttraction(location);
     }
 
