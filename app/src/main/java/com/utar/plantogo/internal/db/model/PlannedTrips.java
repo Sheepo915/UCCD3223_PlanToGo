@@ -12,16 +12,22 @@ public class PlannedTrips {
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
     public int id;
+
     @ColumnInfo(name = "trip_name")
     public String tripName;
+
     @ColumnInfo(name = "trip_location")
     public String tripLocation;
+
     @ColumnInfo(name = "start_date")
     public String startDate;
+
     @ColumnInfo(name = "end_date")
     public String endDate;
+
     @ColumnInfo(name = "notes")
     public String notes;
+
     @ColumnInfo(name = "created_at")
     public String createdAt;
 

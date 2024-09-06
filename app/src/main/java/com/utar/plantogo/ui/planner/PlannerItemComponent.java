@@ -16,9 +16,10 @@ import com.utar.plantogo.PlannerEditFragment;
 import com.utar.plantogo.R;
 
 public class PlannerItemComponent extends ConstraintLayout {
+    private final FragmentManager fragmentManager;
     private ImageView tripImage;
     private TextView tripName, tripLocation, notes, date;
-    private final FragmentManager fragmentManager;
+    private ImageButton editButton;
 
     public PlannerItemComponent(@NonNull Context context, FragmentManager fragmentManager) {
         super(context);
@@ -34,25 +35,28 @@ public class PlannerItemComponent extends ConstraintLayout {
         tripLocation = findViewById(R.id.tv_trip_location);
         notes = findViewById(R.id.tv_notes);
         date = findViewById(R.id.tv_date);
-        ImageButton editButton = findViewById(R.id.ib_edit);
-
-        editButton.setOnClickListener(v -> {
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.root_fragment_container, new PlannerEditFragment());
-            fragmentTransaction.addToBackStack(null);
-            fragmentTransaction.commit();
-        });
-
+        editButton = findViewById(R.id.ib_edit);
     }
 
     public void setContent(@Nullable String imageUrl, String tripName, String tripLocation, String notes, String startDate, String endDate) {
         Glide.with(getContext()).load(imageUrl).fallback(R.drawable.placeholder_image).centerCrop().into(tripImage);
+        String dateText = startDate + " - " + endDate;
+
         this.tripName.setText(tripName);
         if (tripLocation != null && !tripLocation.isEmpty()) {
             tripLocation = tripLocation.substring(0, 1).toUpperCase() + tripLocation.substring(1).toLowerCase();
         }
         this.tripLocation.setText(tripLocation);
         this.notes.setText(notes);
-        this.date.setText(startDate + " - " + endDate);
+        this.date.setText(dateText);
+    }
+
+    public void instantiateListener(int id) {
+        editButton.setOnClickListener(v -> {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.root_fragment_container, PlannerEditFragment.newInstance(id));
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.commit();
+        });
     }
 }

@@ -33,7 +33,7 @@ public class PlannedTripsAdapter extends RecyclerView.Adapter<PlannedTripsAdapte
     public void onBindViewHolder(@NonNull PlannedTripViewHolder holder, int position) {
         PlannedTripsWithDetails tripDetails = plannedTrips.get(position);
         holder.plannerItemComponent.setContent(null, tripDetails.plannedTrip.tripName, tripDetails.plannedTrip.tripLocation, tripDetails.plannedTrip.notes, tripDetails.plannedTrip.startDate, tripDetails.plannedTrip.endDate);
-
+        holder.plannerItemComponent.instantiateListener(tripDetails.plannedTrip.id);
     }
 
     @Override

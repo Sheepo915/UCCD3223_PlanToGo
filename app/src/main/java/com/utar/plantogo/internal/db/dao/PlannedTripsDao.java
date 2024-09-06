@@ -48,6 +48,10 @@ public interface PlannedTripsDao {
     int getMaxIndex(int plannerId);
 
     @Transaction
+    @Query("SELECT * FROM PlannedTrips WHERE id = :id")
+    PlannedTripsWithDetails getPlannedTripsWithDetailsById(int id);
+
+    @Transaction
     @Query("SELECT * FROM PlannedTrips")
     List<PlannedTripsWithDetails> getPlannedTripsWithDetails();
 }

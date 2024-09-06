@@ -1,5 +1,6 @@
 package com.utar.plantogo.internal.db.model;
 
+import androidx.annotation.Nullable;
 import androidx.room.Embedded;
 import androidx.room.Relation;
 
@@ -10,5 +11,6 @@ public class PlannedTripsWithDetails {
     public PlannedTrips plannedTrip;
 
     @Relation(parentColumn = "id", entityColumn = "planner_id")
+    @Nullable
     public List<PlannedTripsDetails> tripsDetails;
 }
