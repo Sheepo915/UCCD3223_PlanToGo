@@ -48,6 +48,9 @@ public class PlannerItemComponent extends ConstraintLayout {
     public void setContent(@Nullable String imageUrl, String tripName, String tripLocation, String notes, String startDate, String endDate) {
         Glide.with(getContext()).load(imageUrl).fallback(R.drawable.placeholder_image).centerCrop().into(tripImage);
         this.tripName.setText(tripName);
+        if (tripLocation != null && !tripLocation.isEmpty()) {
+            tripLocation = tripLocation.substring(0, 1).toUpperCase() + tripLocation.substring(1).toLowerCase();
+        }
         this.tripLocation.setText(tripLocation);
         this.notes.setText(notes);
         this.date.setText(startDate + " - " + endDate);
