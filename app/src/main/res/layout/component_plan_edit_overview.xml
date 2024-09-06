@@ -151,7 +151,7 @@
                 android:layout_width="154dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="28dp"
-                android:text="Country Name"
+                android:text="Description of the destination"
                 android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@+id/iv_trip_image"
                 app:layout_constraintTop_toBottomOf="@+id/tv_trip_name" />
@@ -162,7 +162,7 @@
                 android:layout_height="22dp"
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="4dp"
-                android:text="Title"
+                android:text="Name of Destination"
                 app:layout_constraintStart_toEndOf="@+id/iv_trip_image"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
@@ -171,7 +171,7 @@
                 android:layout_width="154dp"
                 android:layout_height="41dp"
                 android:layout_marginStart="28dp"
-                android:text="Notes"
+                android:text="Adress"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/iv_trip_image"
                 app:layout_constraintTop_toBottomOf="@+id/tv_trip_location"
