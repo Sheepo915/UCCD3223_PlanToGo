@@ -45,11 +45,11 @@ public class PlannerItemComponent extends ConstraintLayout {
 
     }
 
-    public void setContent(@Nullable String imageUrl, String tripName, String tripLocation, String notes, String date) {
+    public void setContent(@Nullable String imageUrl, String tripName, String tripLocation, String notes, String startDate, String endDate) {
         Glide.with(getContext()).load(imageUrl).fallback(R.drawable.placeholder_image).centerCrop().into(tripImage);
         this.tripName.setText(tripName);
         this.tripLocation.setText(tripLocation);
         this.notes.setText(notes);
-        this.date.setText(date);
+        this.date.setText(startDate + " - " + endDate);
     }
 }
