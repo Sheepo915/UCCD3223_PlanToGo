@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.utar.plantogo.R;
 import com.utar.plantogo.internal.db.AppDatabase;
 import com.utar.plantogo.internal.db.model.PlannedTripsDetails;

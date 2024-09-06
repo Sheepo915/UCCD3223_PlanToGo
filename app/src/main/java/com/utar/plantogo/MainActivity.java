@@ -1,7 +1,10 @@
 package com.utar.plantogo;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,12 +15,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -54,22 +63,30 @@ public class MainActivity extends AppCompatActivity {
     private static final String SUPABASE_BASE_URL = BuildConfig.SUPABASE_BASE_URL;
     private static final String SUPABASE_KEY = BuildConfig.SUPABASE_API_KEY;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
     private final Handler handler = new Handler(Looper.getMainLooper());
+    public String User_Token;
     private Toolbar toolbar;
     private BottomNavigationView bottomNavigationView;
     private OnBackPressedCallback onBackPressedCallback;
     private Runnable updateBottomNavRunnable;
     private FragmentViewModel fragmentViewModel;
     private View profileHeaderContainer;
-    public String User_Token;
+    private FusedLocationProviderClient fusedLocationClient;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        fragmentViewModel = new ViewModelProvider(this).get(FragmentViewModel.class);
+
         // Initialize database instance
         AppDatabase.getInstance(this);
         setContentView(R.layout.activity_main);
+
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        getLastLocation();
 
         // Initialize Toolbar and BottomNavigationView
         toolbar = findViewById(R.id.toolbar);
@@ -394,6 +411,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("Error initializing APIRequest: " + e.getMessage());
         }
     }
+
     private void saveToken(Context context, String token) {
         try {
             // Always use a valid context, for example, from an Activity or Fragment.
@@ -401,10 +419,56 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString("auth_token", token);
             editor.apply();
-            Log.d("TokenWatcher","Token:"+ token);
+            Log.d("TokenWatcher", "Token:" + token);
         } catch (Exception e) {
             e.printStackTrace();
             // Handle any specific errors such as context-related issues.
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                getLastLocation();
+            } else {
+                Log.d("Location", "Permission denied");
+            }
+        }
+    }
+
+    private void getLastLocation() {
+        // Check for location permissions
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // Request permission if not granted
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
+            return;
+        }
+
+        // Get the last known location
+        fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+            @Override
+            public void onSuccess(Location location) {
+                // Got last known location. In some rare situations, this can be null.
+                if (location != null) {
+                    // Get latitude and longitude
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+
+                    // Log the latitude and longitude
+                    if (fragmentViewModel != null || latitude != 0.0 || longitude != 0.0) {
+                        fragmentViewModel.setLatitude((float) latitude);
+                        fragmentViewModel.setLongitude((float) longitude);
+                    } else {
+                        fragmentViewModel.setLatitude((float) 4.326199);
+                        fragmentViewModel.setLongitude((float) 101.141494);
+                        Log.d("Location", "ViewModel is not initialized");
+                    }
+                } else {
+                    Log.d("Location", "Location is null");
+                }
+            }
+        });
     }
 }

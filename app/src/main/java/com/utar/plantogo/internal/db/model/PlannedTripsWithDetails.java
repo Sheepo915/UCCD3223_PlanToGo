@@ -8,7 +8,7 @@ import java.util.List;
 
 public class PlannedTripsWithDetails {
     @Embedded
-    public PlannedTrips plannedTrip;
+    public PlannedTrips plannedTrips;
 
     @Relation(parentColumn = "id", entityColumn = "planner_id")
     @Nullable

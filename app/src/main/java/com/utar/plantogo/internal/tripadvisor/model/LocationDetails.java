@@ -8,6 +8,7 @@ import java.util.Map;
 public class LocationDetails {
     private String locationId;
     private String name;
+    @SerializedName("web_url")
     private String webUrl;
     private Address addressObj;
     private List<Ancestor> ancestors;
@@ -18,6 +19,7 @@ public class LocationDetails {
     private String phone;
     private String website;
     private float rating;
+    @SerializedName("write_review")
     private String writeReview;
     @SerializedName("num_reviews")
     private String numReviews;

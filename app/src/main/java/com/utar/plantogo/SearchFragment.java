@@ -1,6 +1,7 @@
 package com.utar.plantogo;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,13 +11,18 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.utar.plantogo.internal.APIRequest;
 import com.utar.plantogo.internal.tripadvisor.TripAdvisor;
 import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.ui.RecyclerViewItemDecoration;
 import com.utar.plantogo.ui.attraction.AttractionListAdapter;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,9 +66,37 @@ public class SearchFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        fragmentViewModel = new ViewModelProvider(this).get(FragmentViewModel.class);
+
         if (getArguments() != null) {
             searchQuery = getArguments().getString(SEARCH_QUERY);
+            String latLong = fragmentViewModel.getLatitude() + ", " + fragmentViewModel.getLongitude();
+            new Thread(() -> {
+                new TripAdvisor().locationSearch(searchQuery, latLong, null, null, null, null, null, null, new APIRequest.ResponseCallback() {
+                    @Override
+                    public void onSuccess(Map<String, Object> responseMap) {
+                        Gson gson = new Gson();
+                        String jsonString = gson.toJson(responseMap);
 
+                        // Convert JSON to the desired object or handle it as needed
+                        // Example: Convert JSON to a list of Location objects
+                        Type locationListType = new TypeToken<List<Location>>() {
+                        }.getType();
+                        List<com.utar.plantogo.internal.tripadvisor.model.Location> locations = gson.fromJson(jsonString, locationListType);
+
+                        // Use the location data (e.g., update UI or process data)
+                        // Example: Log location names
+                        for (com.utar.plantogo.internal.tripadvisor.model.Location location : locations) {
+                            Log.d("LocationSearch", "Location Name: " + location.getName());
+                        }
+                    }
+
+                    @Override
+                    public void onError(Exception e) {
+                        Log.e("LocationSearch", "Error: " + e.getMessage());
+                    }
+                });
+            }).start();
         }
         fragmentViewModel = new ViewModelProvider(requireActivity()).get(FragmentViewModel.class);
     }

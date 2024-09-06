@@ -1,12 +1,14 @@
 package com.utar.plantogo;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -14,14 +16,21 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.utar.plantogo.example.nearbysearch.NearbySearchExample;
+import com.utar.plantogo.internal.APIRequest;
+import com.utar.plantogo.internal.db.AppDatabase;
+import com.utar.plantogo.internal.tripadvisor.TripAdvisor;
 import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.ui.RecyclerViewItemDecoration;
 import com.utar.plantogo.ui.attraction.AttractionListAdapter;
 import com.utar.plantogo.ui.carousel.CarouselLocationAdapter;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Future;
 
 /**
@@ -78,6 +87,39 @@ public class HomeFragment extends Fragment {
 
         // Attraction Recycler View
         attractionListRecyclerView = view.findViewById(R.id.rv_attraction_list);
+
+//        String latLong = fragmentViewModel.getLatitude() + ", " + fragmentViewModel.getLongitude();
+//        new TripAdvisor().nearbyLocationSearch(latLong, null, null, null, null, null, null, new APIRequest.ResponseCallback() {
+//            @Override
+//            public void onSuccess(Map<String, Object> responseMap) {
+//                Gson gson = new Gson();
+//                String jsonString = gson.toJson(responseMap);
+//
+//                Type listType = new TypeToken<Location>() {
+//                }.getType();
+//                List<Location> locations = new Gson().fromJson(jsonString, listType);
+//
+//                fragmentViewModel.setPreloadData(locations);
+//                new Thread(() -> {
+//                    AppDatabase db = AppDatabase.getInstance(requireContext());
+//
+//                    for (Location location : locations) {
+//                        db.locationDao().insertLocation(new com.utar.plantogo.internal.db.model.Location(location));
+//                    }
+//
+//                    requireActivity().runOnUiThread(() -> {
+//                        setupCarousel(locations);
+//                        setupAttractionList(locations);
+//                    });
+//                }).start();
+//            }
+//
+//            @Override
+//            public void onError(Exception e) {
+//                Log.d("DEBUG", e.toString());
+//                Toast.makeText(requireContext(), "Unable to load nearby data", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         // Create an instance of NearbySearchExample
         NearbySearchExample example = new NearbySearchExample(getContext());

@@ -7,12 +7,14 @@ import androidx.room.TypeConverters;
 
 import com.utar.plantogo.internal.db.typeconverter.LocationJSONConverter;
 
+import java.util.Date;
+
 @Entity
 public class Location {
 
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    public int id;
+    public int locationId;
 
     @TypeConverters(LocationJSONConverter.class)
     @ColumnInfo(name = "location_details")
@@ -20,4 +22,9 @@ public class Location {
 
     @ColumnInfo(name = "created_at")
     public String createdAt;
+
+    public Location(com.utar.plantogo.internal.tripadvisor.model.Location location) {
+        this.location = location;
+        this.createdAt = new Date().toString();
+    }
 }

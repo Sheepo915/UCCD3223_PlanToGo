@@ -90,6 +90,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_trip_name" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_planned_trip_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -97,6 +98,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sv_attraction_search" />
+
+    <TextView
+        android:id="@+id/tv_no_trips_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/no_saved_trips_yet"
+        android:textAlignment="center"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sv_attraction_search"
+        app:layout_constraintVertical_bias="0.05" />
 
     <ImageButton
         android:id="@+id/ib_add_new_trip"

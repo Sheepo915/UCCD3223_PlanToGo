@@ -49,4 +49,8 @@
     <string name="navigate_to_map">navigate to map</string>
     <string name="start_date_end_date">Start Date - End Date</string>
     <string name="itinerary">Itinerary</string>
+    <string name="itinerary_active"><u>Itinerary</u></string>
+    <string name="unknown_location">Unknown Location</string>
+    <string name="unknown_address">Unknown Address</string>
+    <string name="no_saved_trips_yet">No Saved Trips Yet</string>
 </resources>

@@ -11,7 +11,7 @@ public class PlannedTrips {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")
-    public int id;
+    public int plannedTripId;
 
     @ColumnInfo(name = "trip_name")
     public String tripName;

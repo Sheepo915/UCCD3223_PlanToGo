@@ -1,6 +1,7 @@
 package com.utar.plantogo.internal.tripadvisor;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.utar.plantogo.internal.APIRequest;
 
@@ -24,7 +25,7 @@ public interface TripAdvisorAPI {
      * @param language   The language in which to return results (e.g. "en" for English or "es" for Spanish) from the list of our Supported Languages.
      * @param callback   Callback function for handling data returned from the API
      */
-    void nearbyLocationSearch(@NonNull String latLong, Optional<String> category, Optional<String> phone, Optional<String> address, Optional<String> radius, Optional<String> radiusUnit, Optional<String> language, APIRequest.ResponseCallback callback);
+    void nearbyLocationSearch(@NonNull String latLong, @Nullable String category, @Nullable String phone, @Nullable String address, @Nullable String radius, @Nullable String radiusUnit, @Nullable String language, APIRequest.ResponseCallback callback);
 
     /**
      * Location Search request that returns up to 10 location found based on the provided search query and with nearby location set to default on
@@ -38,5 +39,9 @@ public interface TripAdvisorAPI {
      * @param language      The language in which to return results (e.g. "en" for English or "es" for Spanish) from the list of our Supported Languages.
      * @param callback      Callback function for handling data returned from the API
      */
-    void locationSearch(@NonNull String searchQuery, Optional<String> latLong, Optional<String> category, Optional<String> phone, Optional<String> address, Optional<String> radius, Optional<String> radiusUnit, Optional<String> language, APIRequest.ResponseCallback callback);
+    void locationSearch(@NonNull String searchQuery, @Nullable String latLong, @Nullable String category, @Nullable String phone, @Nullable String address, @Nullable String radius, @Nullable String radiusUnit, @Nullable String language, APIRequest.ResponseCallback callback);
+
+
+    void locationDetails(@NonNull String locationId, APIRequest.ResponseCallback callback);
+
 }

@@ -15,7 +15,23 @@ import java.util.List;
 public class FragmentViewModel extends ViewModel {
     private final MutableLiveData<Location> selectedLocation = new MutableLiveData<>();
     private List<Location> preloadData = null;
+    private float latitude, longitude;
 
+    public float getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(float latitude) {
+        this.latitude = latitude;
+    }
+
+    public float getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(float longitude) {
+        this.longitude = longitude;
+    }
 
     public LiveData<Location> getSelectedLocation() {
         return selectedLocation;

@@ -12,12 +12,26 @@ public class Location {
     private String bearing;
     @SerializedName("address_obj")
     private Address addressObj;
+    @SerializedName("details")
     private LocationDetails details;
+    @SerializedName("photos")
     private List<Photo> photos;
+    @SerializedName("reviews")
     private List<Review> reviews;
 
     public String getName() {
         return name;
+    }
+
+    public Location(String locationId, String name, String distance, String bearing, Address addressObj, LocationDetails details, List<Photo> photos, List<Review> reviews) {
+        this.locationId = locationId;
+        this.name = name;
+        this.distance = distance;
+        this.bearing = bearing;
+        this.addressObj = addressObj;
+        this.details = details;
+        this.photos = photos;
+        this.reviews = reviews;
     }
 
     public Address getAddressObj() {

@@ -19,18 +19,16 @@ import com.utar.plantogo.internal.db.typeconverter.LocationJSONConverter;
  * <p>Singleton implementation of the database.</p>
  * <p>Use getInstance(Context context) to retrieve the database instance</p>
  */
-@Database(entities = {Location.class, PlannedTripsDetails.class, PlannedTrips.class}, version = 1)
+@Database(entities = {Location.class, PlannedTripsDetails.class, PlannedTrips.class}, version = 2)
 @TypeConverters({LocationJSONConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase INSTANCE;
 
-    public abstract LocationDao locationDao();
-    public abstract PlannedTripsDao plannedTripsDao();
-
     /**
      * Singleton implementation of application database.
      * <p>Use getInstance to initialize the database in MainActivity</p>
+     *
      * @param context Application context, use MainActivity
      * @return Database instance
      */
@@ -38,13 +36,14 @@ public abstract class AppDatabase extends RoomDatabase {
         if (INSTANCE == null) {
             synchronized (AppDatabase.class) {
                 if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                                    AppDatabase.class, "plantogo_database")
-                            .fallbackToDestructiveMigration()
-                            .build();
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "plantogo_database").fallbackToDestructiveMigration().build();
                 }
             }
         }
         return INSTANCE;
     }
+
+    public abstract LocationDao locationDao();
+
+    public abstract PlannedTripsDao plannedTripsDao();
 }

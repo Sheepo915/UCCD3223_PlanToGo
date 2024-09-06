@@ -1,13 +1,11 @@
 package com.utar.plantogo;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.URLSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +23,10 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.utar.plantogo.internal.db.AppDatabase;
 import com.utar.plantogo.internal.db.pojo.TripIdName;
@@ -34,7 +36,6 @@ import com.utar.plantogo.internal.tripadvisor.model.Review;
 import com.utar.plantogo.ui.RecyclerViewItemDecoration;
 import com.utar.plantogo.ui.bottomsheet.PlannedTripBottomSheetAdapter;
 import com.utar.plantogo.ui.carousel.CarouselPhotoAdapter;
-import com.utar.plantogo.ui.googlemap.MapComponent;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 import java.io.UnsupportedEncodingException;
@@ -172,8 +173,26 @@ public class AttractionFragment extends Fragment {
             contentContainer.addView(website);
         }
 
-        // Instantiate static map
-        contentContainer.addView(createOverviewStaticMapInfoItem(location.getDetails().getLatitude(), location.getDetails().getLongitude()));
+        View mapView = createMapView(Double.parseDouble(location.getDetails().getLatitude()), Double.parseDouble(location.getDetails().getLongitude()));
+        ConstraintLayout map = createOverviewInfoCard("Location", mapView);
+
+        contentContainer.addView(map);
+
+    }
+
+
+    private View createMapView(double latitude, double longitude) {
+        MapView mapView = new MapView(requireContext());
+        mapView.onCreate(null);
+        mapView.onResume();
+        mapView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        mapView.getMapAsync(googleMap -> {
+            LatLng location = new LatLng(latitude, longitude);
+            googleMap.addMarker(new MarkerOptions().position(location).title("Location"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
+            mapView.post(mapView::requestLayout);
+        });
+        return mapView;
     }
 
     private void instantiateReviewContent(LinearLayout contentContainer) {
@@ -235,43 +254,46 @@ public class AttractionFragment extends Fragment {
         return constraintLayout;
     }
 
-    protected ConstraintLayout createOverviewStaticMapInfoItem(String latitude, String longitude) {
-        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+    protected ConstraintLayout createOverviewInfoCard(String title, View component) {
         ConstraintLayout constraintLayout = new ConstraintLayout(requireContext());
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
         constraintLayout.setLayoutParams(layoutParams);
         constraintLayout.setPadding(6, 6, 6, 6);
 
-        TextView tvCardTitle = new TextView(requireContext());
-        tvCardTitle.setId(ConstraintLayout.generateViewId());
-        tvCardTitle.setTypeface(null, Typeface.BOLD);
-        tvCardTitle.setText(R.string.location);
-        constraintLayout.addView(tvCardTitle);
+        // Create and configure the title TextView
+        TextView titleTextView = new TextView(requireContext());
+        titleTextView.setId(View.generateViewId());
+        titleTextView.setText(title);
+        titleTextView.setTypeface(null, android.graphics.Typeface.BOLD);
 
-        MapComponent mapComponent = new MapComponent(requireContext(), Float.parseFloat(latitude), Float.parseFloat(longitude));
-        mapComponent.setId(MapComponent.generateViewId());
-        constraintLayout.addView(mapComponent);
+        // Add the title TextView and component to the ConstraintLayout
+        constraintLayout.addView(titleTextView);
+        component.setId(View.generateViewId());
+        constraintLayout.addView(component);
 
-        // Set LayoutParams
+        // Set layout parameters for the TextView and component
         ConstraintLayout.LayoutParams titleParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
-        tvCardTitle.setLayoutParams(titleParams);
+        titleTextView.setLayoutParams(titleParams);
 
-        ConstraintLayout.LayoutParams contentParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, 0);
-        contentParams.topToBottom = tvCardTitle.getId();
-        contentParams.topMargin = 6;
-        mapComponent.setLayoutParams(contentParams);
+        ConstraintLayout.LayoutParams componentParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        component.setLayoutParams(componentParams);
 
-        // Apply constraints
+        // Apply constraints using ConstraintSet
         ConstraintSet constraintSet = new ConstraintSet();
         constraintSet.clone(constraintLayout);
 
-        constraintSet.connect(tvCardTitle.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
-        constraintSet.connect(tvCardTitle.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-        constraintSet.connect(tvCardTitle.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+        // Title TextView constraints
+        constraintSet.connect(titleTextView.getId(), ConstraintSet.TOP, ConstraintSet.PARENT_ID, ConstraintSet.TOP);
+        constraintSet.connect(titleTextView.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+        constraintSet.connect(titleTextView.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
 
-        constraintSet.connect(mapComponent.getId(), ConstraintSet.TOP, tvCardTitle.getId(), ConstraintSet.BOTTOM);
-        constraintSet.connect(mapComponent.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-        constraintSet.connect(mapComponent.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
-        constraintSet.connect(mapComponent.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+        // Component constraints
+        constraintSet.connect(component.getId(), ConstraintSet.TOP, titleTextView.getId(), ConstraintSet.BOTTOM, (int) (6 * getResources().getDisplayMetrics().density));
+        constraintSet.connect(component.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+        constraintSet.connect(component.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+        constraintSet.connect(component.getId(), ConstraintSet.BOTTOM, ConstraintSet.PARENT_ID, ConstraintSet.BOTTOM);
+
+        // Apply the constraints
         constraintSet.applyTo(constraintLayout);
 
         return constraintLayout;
