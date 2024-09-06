@@ -43,4 +43,7 @@
     <string name="end_date">End date</string>
     <string name="notes_reminder">Notes. any reminder?</string>
     <string name="start_planning">Start Planning</string>
+    <string name="add_new_trip">Add new trip</string>
+    <string name="attraction_showcase_image">Attraction showcase image</string>
+    <string name="edit_trip">Edit trip</string>
 </resources>

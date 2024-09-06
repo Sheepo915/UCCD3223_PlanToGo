@@ -135,7 +135,7 @@
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
             <ImageView
-                android:id="@+id/iv_attraction_list_img"
+                android:id="@+id/iv_trip_image"
                 android:layout_width="122dp"
                 android:layout_height="105dp"
                 android:layout_marginStart="20dp"
@@ -147,23 +147,23 @@
                 app:layout_constraintVertical_bias="1.0" />
 
             <TextView
-                android:id="@+id/tv_attraction_location"
+                android:id="@+id/tv_trip_location"
                 android:layout_width="154dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="28dp"
                 android:text="Country Name"
                 android:textSize="12sp"
-                app:layout_constraintStart_toEndOf="@+id/iv_attraction_list_img"
-                app:layout_constraintTop_toBottomOf="@+id/tv_attraction_list_name" />
+                app:layout_constraintStart_toEndOf="@+id/iv_trip_image"
+                app:layout_constraintTop_toBottomOf="@+id/tv_trip_name" />
 
             <TextView
-                android:id="@+id/tv_attraction_list_name"
+                android:id="@+id/tv_trip_name"
                 android:layout_width="154dp"
                 android:layout_height="22dp"
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="4dp"
                 android:text="Title"
-                app:layout_constraintStart_toEndOf="@+id/iv_attraction_list_img"
+                app:layout_constraintStart_toEndOf="@+id/iv_trip_image"
                 app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
             <TextView
@@ -173,8 +173,8 @@
                 android:layout_marginStart="28dp"
                 android:text="Notes"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/iv_attraction_list_img"
-                app:layout_constraintTop_toBottomOf="@+id/tv_attraction_location"
+                app:layout_constraintStart_toEndOf="@+id/iv_trip_image"
+                app:layout_constraintTop_toBottomOf="@+id/tv_trip_location"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
@@ -196,7 +196,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/ib_edit"
                 android:layout_width="22dp"
                 android:layout_height="25dp"
                 android:layout_marginBottom="4dp"

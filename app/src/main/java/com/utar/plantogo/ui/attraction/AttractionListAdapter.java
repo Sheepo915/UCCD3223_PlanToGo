@@ -1,6 +1,7 @@
 package com.utar.plantogo.ui.attraction;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,7 @@ public class AttractionListAdapter extends RecyclerView.Adapter<AttractionListAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Location location = data.get(position);
+
 
         holder.attractionListComponent.setAttraction(location);
     }

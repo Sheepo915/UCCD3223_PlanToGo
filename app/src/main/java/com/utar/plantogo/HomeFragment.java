@@ -1,6 +1,5 @@
 package com.utar.plantogo;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.utar.plantogo.example.nearbysearch.NearbySearchExample;
 import com.utar.plantogo.internal.tripadvisor.model.Location;
+import com.utar.plantogo.ui.RecyclerViewItemDecoration;
 import com.utar.plantogo.ui.attraction.AttractionListAdapter;
 import com.utar.plantogo.ui.carousel.CarouselLocationAdapter;
-import com.utar.plantogo.ui.RecyclerViewItemDecoration;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 import java.util.List;
@@ -127,7 +126,7 @@ public class HomeFragment extends Fragment {
 
     private void setupAttractionList(List<Location> data) {
         // Set the LayoutManager
-        attractionListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+//        attractionListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Create and set the adapter
         AttractionListAdapter adapter = new AttractionListAdapter(getContext(), data, getParentFragmentManager(), fragmentViewModel);

@@ -27,11 +27,11 @@ public class AttractionListComponent extends AttractionComponent {
     private void init(Context context) {
         inflate(context, R.layout.component_attraction_list, this);
 
-        attractionShowcaseImage = findViewById(R.id.iv_attraction_list_img);
-        attractionName = findViewById(R.id.tv_attraction_list_name);
+        attractionShowcaseImage = findViewById(R.id.iv_trip_image);
+        attractionName = findViewById(R.id.tv_trip_name);
         rating = findViewById(R.id.tv_review_count);
         ratingBar = findViewById(R.id.rb_rating);
-        location = findViewById(R.id.tv_attraction_location);
+        location = findViewById(R.id.tv_trip_location);
     }
 
     @Override
