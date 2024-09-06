@@ -29,4 +29,12 @@ public class PlannedTripsDetails {
     @ColumnInfo(name = "created_at")
     public String createdAt;
 
+    public PlannedTripsDetails(int plannerId, int locationId, int index, String plannedTimestamp, String notes, String createdAt) {
+        this.plannerId = plannerId;
+        this.locationId = locationId;
+        this.index = index;
+        this.plannedTimestamp = plannedTimestamp;
+        this.notes = notes;
+        this.createdAt = createdAt;
+    }
 }

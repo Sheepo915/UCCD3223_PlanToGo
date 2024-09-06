@@ -1,42 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
     android:nestedScrollingEnabled="true">
 
-    <FrameLayout
+    <ImageView
+        android:id="@+id/iv_calendar"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:src="@drawable/sharp_calendar_24"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/ll_nav_tab_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_start_to_end_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:hint="@string/start_date_end_date"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/ll_nav_tab_container"
+        app:layout_constraintStart_toEndOf="@+id/iv_calendar"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_nav_tab_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".PlannerFragment">
+        android:layout_height="wrap_content"
+        android:background="@color/nav_bar_background"
+        android:elevation="2dp"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="14dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_start_to_end_date"
+        app:layout_constraintBottom_toTopOf="@+id/tv_trip_name">
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <TextView
+            android:id="@+id/tv_overview1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="26dp"
+            android:text="@string/overview"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
 
-            <LinearLayout
-                android:id="@+id/test3"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-            </LinearLayout>
+        <TextView
+            android:id="@+id/tv_itinerary"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/itinerary"
+            android:textColor="@color/black"
+            android:textStyle="bold" />
+    </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/ib_add_new_trip"
-                android:layout_width="87dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
-                android:layout_marginStart="6dp"
-                android:layout_marginTop="6dp"
-                android:layout_marginEnd="34dp"
-                android:layout_marginBottom="6dp"
-                android:elevation="10dp"
-                android:src="@android:drawable/ic_dialog_map" />
+    <TextView
+        android:id="@+id/tv_trip_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="8dp"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_nav_tab_container" />
 
-        </RelativeLayout>
 
-    </FrameLayout>
+    <SearchView
+        android:id="@+id/sv_attraction_search"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="8dp"
+        android:background="@drawable/search_view_background"
+        android:searchIcon="@drawable/baseline_location_on_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_trip_name" />
+
+
+
+    <ImageButton
+        android:id="@+id/ib_add_new_trip"
+        android:layout_width="87dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="10dp"
+        android:contentDescription="@string/navigate_to_map"
+        android:elevation="10dp"
+        android:src="@android:drawable/ic_dialog_map"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

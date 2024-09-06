@@ -27,6 +27,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.utar.plantogo.internal.db.AppDatabase;
+import com.utar.plantogo.internal.db.pojo.TripIdName;
 import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.internal.tripadvisor.model.Photo;
 import com.utar.plantogo.internal.tripadvisor.model.Review;
@@ -139,13 +140,11 @@ public class AttractionFragment extends Fragment {
         Objects.requireNonNull(recyclerView).setLayoutManager(new LinearLayoutManager(requireContext()));
 
         new Thread(() -> {
-            List<String> plannedTrips = db.plannedTripsDao().getAllTripsName();
-            Log.d("DEBUG", "Planned Trips Size: " + plannedTrips.size());
-            Log.d("DEBUG", "Planned Trips: " + plannedTrips);
+            List<TripIdName> plannedTrips = db.plannedTripsDao().getAllTripsName();
 
             // Run on the main thread to update UI
             requireActivity().runOnUiThread(() -> {
-                PlannedTripBottomSheetAdapter adapter = new PlannedTripBottomSheetAdapter(requireContext(), plannedTrips);
+                PlannedTripBottomSheetAdapter adapter = new PlannedTripBottomSheetAdapter(requireContext(), plannedTrips, fragmentViewModel, tripsDialog);
                 recyclerView.setAdapter(adapter);
             });
         }).start();

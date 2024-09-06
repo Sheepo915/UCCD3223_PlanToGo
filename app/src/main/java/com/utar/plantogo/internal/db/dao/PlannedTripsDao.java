@@ -10,6 +10,7 @@ import androidx.room.Update;
 import com.utar.plantogo.internal.db.model.PlannedTrips;
 import com.utar.plantogo.internal.db.model.PlannedTripsDetails;
 import com.utar.plantogo.internal.db.model.PlannedTripsWithDetails;
+import com.utar.plantogo.internal.db.pojo.TripIdName;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface PlannedTripsDao {
     void insertPlannedTrip(PlannedTrips plannedTrips);
 
     @Insert
-    void insertPlannedTripDetails(PlannedTripsDetails... tripDetails);
+    void insertPlannedTripDetails(PlannedTripsDetails tripDetails);
 
     @Update
     void updatePlannedTrip(PlannedTrips plannedTrips);
@@ -37,11 +38,14 @@ public interface PlannedTripsDao {
     @Query("SELECT COUNT(id) FROM plannedtrips")
     int getTripsCount();
 
-    @Query("SELECT trip_name FROM plannedtrips")
-    List<String> getAllTripsName();
+    @Query("SELECT id, trip_name FROM plannedtrips")
+    List<TripIdName> getAllTripsName();
 
     @Query("SELECT * FROM PlannedTrips WHERE id = :id")
     PlannedTrips getTripById(int id);
+
+    @Query("SELECT MAX(`index`) FROM PlannedTripsDetails WHERE planner_id = :plannerId")
+    int getMaxIndex(int plannerId);
 
     @Transaction
     @Query("SELECT * FROM PlannedTrips")
