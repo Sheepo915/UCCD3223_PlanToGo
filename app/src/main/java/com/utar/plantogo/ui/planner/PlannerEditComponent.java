@@ -11,7 +11,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.utar.plantogo.MainActivity;
 import com.utar.plantogo.R;
 import com.utar.plantogo.internal.APIRequest;
@@ -20,7 +19,6 @@ import com.utar.plantogo.internal.db.model.Location;
 import com.utar.plantogo.internal.db.model.PlannedTripsDetails;
 import com.utar.plantogo.internal.tripadvisor.TripAdvisor;
 
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Map;
 
@@ -41,7 +39,7 @@ public class PlannerEditComponent extends ConstraintLayout {
         inflate(context, R.layout.component_plan_edit_overview, this);
 
         index = findViewById(R.id.tv_index);
-        locationName = findViewById(R.id.tv_trip_location);
+        locationName = findViewById(R.id.tv_location_name);
         address = findViewById(R.id.tv_address);
         notes = findViewById(R.id.tv_notes);
         date = findViewById(R.id.tv_date);
@@ -94,20 +92,29 @@ public class PlannerEditComponent extends ConstraintLayout {
     }
 
     private void updateLocationUI(com.utar.plantogo.internal.tripadvisor.model.Location locationData) {
-        locationName.setText(locationData.getDetails().getName());
-        address.setText(locationData.getDetails().getAddressObj().getAddressString());
-
-        List<com.utar.plantogo.internal.tripadvisor.model.Photo> photos = locationData.getPhotos();
-
-        // Check if there are photos available
-        if (photos != null && !photos.isEmpty()) {
-            String imageUrl = String.valueOf(photos.get(0).getImages().getFallbackImage());
-
-            // Load image with Glide
-            Glide.with(context).load(imageUrl).placeholder(R.drawable.placeholder_image).error(R.drawable.placeholder_image).into(image);
+        if (locationName != null) {
+            locationName.setText(locationData.getName());
         } else {
-            // If no image exists, load a placeholder
-            image.setImageResource(R.drawable.placeholder_image);
+            Log.d("PlannerEditComponent", "locationName is null");
+        }
+
+        if (address != null) {
+            address.setText(locationData.getAddressObj().getAddressString());
+        } else {
+            Log.d("PlannerEditComponent", "address is null");
+        }
+
+        if (image != null) {
+            List<com.utar.plantogo.internal.tripadvisor.model.Photo> photos = locationData.getPhotos();
+
+            if (photos != null && !photos.isEmpty()) {
+                String imageUrl = String.valueOf(photos.get(0).getImages().getFallbackImage().getUrl());
+                Glide.with(context).load(imageUrl).centerCrop().placeholder(R.drawable.placeholder_image).error(R.drawable.placeholder_image).into(image);
+            } else {
+                image.setImageResource(R.drawable.placeholder_image);
+            }
+        } else {
+            Log.d("PlannerEditComponent", "image is null");
         }
     }
 }

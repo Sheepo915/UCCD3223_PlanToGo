@@ -49,7 +49,7 @@ public class AttractionListComponent extends AttractionComponent {
 
             String imageUrl = null;
             if (location.getPhotos() != null && !location.getPhotos().isEmpty()) {
-                imageUrl = location.getPhotos().get(0).getImages().getMedium().getUrl();
+                imageUrl = location.getPhotos().get(0).getImages().getFallbackImage().getUrl();
             }
             setImage(imageUrl);
         }

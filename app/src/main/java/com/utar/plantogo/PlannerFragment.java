@@ -97,13 +97,4 @@ public class PlannerFragment extends Fragment {
         transaction.commit();
     }
 
-    private void navigateToPlannerEditFragment() {
-        // Navigate to the SearchFragment
-        FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
-        transaction.replace(R.id.root_fragment_container, new PlannerEditFragment());
-        transaction.addToBackStack(null);
-        // Commit the transaction
-        transaction.commit();
-    }
-
 }

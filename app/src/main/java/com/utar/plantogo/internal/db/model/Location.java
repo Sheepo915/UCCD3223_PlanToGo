@@ -12,7 +12,7 @@ import java.util.Date;
 @Entity
 public class Location {
 
-    @PrimaryKey(autoGenerate = true)
+    @PrimaryKey
     @ColumnInfo(name = "id")
     public int locationId;
 
@@ -24,6 +24,7 @@ public class Location {
     public String createdAt;
 
     public Location(com.utar.plantogo.internal.tripadvisor.model.Location location) {
+        this.locationId = Integer.parseInt(location.getLocationId());
         this.location = location;
         this.createdAt = new Date().toString();
     }

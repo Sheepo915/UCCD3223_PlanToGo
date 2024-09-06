@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.utar.plantogo.R;
 import com.utar.plantogo.internal.db.AppDatabase;
+import com.utar.plantogo.internal.db.model.Location;
 import com.utar.plantogo.internal.db.model.PlannedTripsDetails;
 import com.utar.plantogo.internal.db.pojo.TripIdName;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
@@ -59,6 +60,7 @@ public class PlannedTripBottomSheetAdapter extends RecyclerView.Adapter<PlannedT
                 PlannedTripsDetails plannedTripsDetails = new PlannedTripsDetails(plannedTrip.getId(), Integer.parseInt(Objects.requireNonNull(viewModel.getSelectedLocation().getValue()).getLocationId()), nextIndex, "", "", new Date().toString());
 
                 db.plannedTripsDao().insertPlannedTripDetails(plannedTripsDetails);
+                db.locationDao().insertLocation(new Location(viewModel.getSelectedLocation().getValue()));
 
                 ((Activity) context).runOnUiThread(() -> {
                     if (bottomSheetFragment != null) {

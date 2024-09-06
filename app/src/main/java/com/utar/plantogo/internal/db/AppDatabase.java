@@ -19,7 +19,7 @@ import com.utar.plantogo.internal.db.typeconverter.LocationJSONConverter;
  * <p>Singleton implementation of the database.</p>
  * <p>Use getInstance(Context context) to retrieve the database instance</p>
  */
-@Database(entities = {Location.class, PlannedTripsDetails.class, PlannedTrips.class}, version = 2)
+@Database(entities = {Location.class, PlannedTripsDetails.class, PlannedTrips.class}, version = 3)
 @TypeConverters({LocationJSONConverter.class})
 public abstract class AppDatabase extends RoomDatabase {
 
