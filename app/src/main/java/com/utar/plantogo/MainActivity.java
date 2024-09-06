@@ -1,5 +1,7 @@
 package com.utar.plantogo;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -59,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
     private Runnable updateBottomNavRunnable;
     private FragmentViewModel fragmentViewModel;
     private View profileHeaderContainer;
+    public String User_Token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -296,9 +299,9 @@ public class MainActivity extends AppCompatActivity {
         // Set onClick listener for the confirm login button
         loginButton.setOnClickListener(v -> {
             // Handle login confirmation logic here
-            String username = Objects.requireNonNull(loginEmail.getText()).toString();
+            String email = Objects.requireNonNull(loginEmail.getText()).toString();
             String password = Objects.requireNonNull(loginPassword.getText()).toString();
-            handleLogin(username, password);
+            handleLogin(email, password);
             loginBottomSheetDialog.dismiss(); // Dismiss the login bottom sheet
         });
 
@@ -333,10 +336,15 @@ public class MainActivity extends AppCompatActivity {
             apiRequest.makeRequest(new APIRequest.ResponseCallback() {
                 @Override
                 public void onSuccess(Map<String, Object> responseMap) {
-                    // Handle successful login
-                    System.out.println("Login successful: " + responseMap.toString());
-                    // Store user session data or move to the next screen
-                    profileHeaderContainer.findViewById(R.id.tv_username);
+                    String accessToken = (String) responseMap.get("access_token");
+
+                    if (accessToken != null) {
+                        // Successfully retrieved the token, you can now use it for authenticated requests
+                        Log.d("LoginUser", "User logged in successfully. Access Token: " + accessToken);
+                        saveToken(getApplicationContext(), accessToken);
+                    } else {
+                        Log.e("LoginUser", "Login successful but token not found in response.");
+                    }
                 }
 
                 @Override
@@ -384,6 +392,19 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Error initializing APIRequest: " + e.getMessage());
+        }
+    }
+    private void saveToken(Context context, String token) {
+        try {
+            // Always use a valid context, for example, from an Activity or Fragment.
+            SharedPreferences sharedPreferences = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("auth_token", token);
+            editor.apply();
+            Log.d("TokenWatcher","Token:"+ token);
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Handle any specific errors such as context-related issues.
         }
     }
 }

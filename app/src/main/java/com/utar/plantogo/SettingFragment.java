@@ -3,6 +3,7 @@ package com.utar.plantogo;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,10 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+
+import com.utar.plantogo.internal.APIRequest;
+
+import java.util.Map;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,8 +38,10 @@ public class SettingFragment extends Fragment {
     private String mParam1;
     private String mParam2;
     private Switch NightSwitch, NotisSwitch;
-    private ImageView Help, Terms;
+    private ImageView Help, Terms, LogOut;
     private AppCompatButton Edit;
+    private static final String SUPABASE_BASE_URL = BuildConfig.SUPABASE_BASE_URL;
+    private static final String SUPABASE_KEY = BuildConfig.SUPABASE_API_KEY;
 
     public SettingFragment() {
         // Required empty public constructor
@@ -79,11 +86,14 @@ public class SettingFragment extends Fragment {
         Help = view.findViewById(R.id.IV_Help);
         Terms = view.findViewById(R.id.IV_Term);
         Edit = view.findViewById(R.id.EditAccBTN);
+        LogOut = view.findViewById(R.id.IV_LogOut);
 
 
         Help.setOnClickListener(v -> navigateToFragment(new HelpFragment()));
         Terms.setOnClickListener(v -> navigateToFragment(new TermsAndConditionsFragment()));
         Edit.setOnClickListener(v -> navigateToFragment(new EditAccountFragment()));
+        LogOut.setOnClickListener(v ->logoutUser());
+
 
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -138,4 +148,48 @@ public class SettingFragment extends Fragment {
         fragmentTransaction.addToBackStack(null); // Add this transaction to the back stack
         fragmentTransaction.commit();
     }
+
+
+    private void logoutUser() {
+        try {
+
+            String token = getToken(getContext());
+
+            APIRequest apiRequest = new APIRequest(SUPABASE_BASE_URL + "/auth/v1/logout");
+            apiRequest.setRequestMethod(APIRequest.REQUEST_METHOD.POST);
+            apiRequest.addHeader("Content-Type", "application/json");
+            apiRequest.addHeader("apikey", SUPABASE_KEY);
+            apiRequest.addHeader("Authorization", token);
+
+            apiRequest.makeRequest(new APIRequest.ResponseCallback() {
+                @Override
+                public void onSuccess(Map<String, Object> responseMap) {
+                    // Handle success (e.g., navigate to login screen)
+                    Log.d("LogoutUser", "User logged out successfully.");
+                    clearToken(getContext()); // Clear token from SharedPreferences
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    // Handle errors
+                    Log.e("LogoutUser", "Failed to log out: " + e.getMessage(), e);
+                }
+            });
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private void clearToken(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.remove("auth_token");
+        editor.apply();
+    }
+
+    private String getToken(Context context) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        return sharedPreferences.getString("auth_token", null); // Returns null if no token found
+    }
+
 }

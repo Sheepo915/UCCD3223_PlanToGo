@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.URLSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +16,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RatingBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -31,6 +31,7 @@ import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.internal.tripadvisor.model.Photo;
 import com.utar.plantogo.internal.tripadvisor.model.Review;
 import com.utar.plantogo.ui.RecyclerViewItemDecoration;
+import com.utar.plantogo.ui.bottomsheet.PlannedTripBottomSheetAdapter;
 import com.utar.plantogo.ui.carousel.CarouselPhotoAdapter;
 import com.utar.plantogo.ui.googlemap.MapComponent;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
@@ -134,30 +135,18 @@ public class AttractionFragment extends Fragment {
         });
 
         AppDatabase db = AppDatabase.getInstance(requireContext());
+        RecyclerView recyclerView = tripsDialog.findViewById(R.id.rv_planner_list_modal_container);
+        Objects.requireNonNull(recyclerView).setLayoutManager(new LinearLayoutManager(requireContext()));
+
         new Thread(() -> {
-            int tripCount = db.plannedTripsDao().getTripsCount();
-            ScrollView scrollView = tripsDialog.findViewById(R.id.sv_planner_list_modal_container);
+            List<String> plannedTrips = db.plannedTripsDao().getAllTripsName();
+            Log.d("DEBUG", "Planned Trips Size: " + plannedTrips.size());
+            Log.d("DEBUG", "Planned Trips: " + plannedTrips);
 
             // Run on the main thread to update UI
             requireActivity().runOnUiThread(() -> {
-                if (tripCount == 0) {
-                    View noTripsLayout = LayoutInflater.from(requireContext()).inflate(R.layout.component_bottom_sheet_no_planned_trips, null);
-
-                    if (scrollView != null) {
-                        scrollView.addView(noTripsLayout);
-                    }
-                } else {
-                    List<String> plannedTrips = db.plannedTripsDao().getAllTripsName();
-
-                    for (String name : plannedTrips) {
-                        TextView textView = new TextView(requireContext());
-                        textView.setText(name);
-
-                        if (scrollView != null) {
-                            scrollView.addView(textView);
-                        }
-                    }
-                }
+                PlannedTripBottomSheetAdapter adapter = new PlannedTripBottomSheetAdapter(requireContext(), plannedTrips);
+                recyclerView.setAdapter(adapter);
             });
         }).start();
 
