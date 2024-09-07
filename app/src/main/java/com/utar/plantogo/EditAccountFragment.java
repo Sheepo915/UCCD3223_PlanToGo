@@ -69,7 +69,7 @@ public class EditAccountFragment extends Fragment {
             String token = getToken(requireContext());
 
             // Construct the JSON body
-            String jsonBody = String.format("{\"name\": \"" + UserName + "\" ,\"Phone\": \"" + Phone + " \"}");
+            String jsonBody = String.format("{\"phone\": \"" + Phone + "\", \"data\": {\"displayName\": \" + "+ UserName +"\"}}");
             apiRequest.setRequestBody(jsonBody);
 
             // Add required headers
