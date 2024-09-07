@@ -66,7 +66,7 @@ public class EditAccountFragment extends Fragment {
             // Set the request method to POST
             apiRequest.setRequestMethod(APIRequest.REQUEST_METHOD.POST);
 
-            String token = getToken(getContext());
+            String token = getToken(requireContext());
 
             // Construct the JSON body
             String jsonBody = String.format("{\"name\": \"" + UserName + "\" ,\"Phone\": \"" + Phone + " \"}");
@@ -84,7 +84,7 @@ public class EditAccountFragment extends Fragment {
     }
 
     private String getToken(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
         return sharedPreferences.getString("auth_token", null); // Returns null if no token found
     }
 }
