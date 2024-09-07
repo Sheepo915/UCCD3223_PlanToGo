@@ -82,12 +82,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // Initialize the view model
         fragmentViewModel = new ViewModelProvider(this).get(FragmentViewModel.class);
 
         // Initialize database instance
         AppDatabase.getInstance(this);
         setContentView(R.layout.activity_main);
 
+        // Initialize Google Play Service to capture the current geolocation the user in
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         getLastLocation();
 
@@ -96,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
         bottomNavigationView = findViewById(R.id.bottom_navigation_bar);
         TextView loginText = findViewById(R.id.tv_profile_header_action_text);
 
+        // Initialize the toolbar as with the profile header component
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
 
@@ -127,10 +130,13 @@ public class MainActivity extends AppCompatActivity {
             return false;
         });
 
+        // If there are no fragment in the root container
+        // Home fragment will be called
         if (savedInstanceState == null) {
             bottomNavigationView.setSelectedItemId(R.id.nav_home);
         }
 
+        // Set listener to check configure the bottom app navigation and tool bar behaviour
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.root_fragment_container);
 
@@ -180,6 +186,11 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Function to check if the current fragment is an instance of three of the root fragments.
+     * @param fragment Current fragment in the root container
+     * @return True if is one of the root fragment False if it is not.
+     */
     private boolean isRootPage(Fragment fragment) {
         return fragment instanceof HomeFragment || fragment instanceof PlannerFragment || fragment instanceof SettingFragment;
     }
