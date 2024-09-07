@@ -1,12 +1,14 @@
 package com.utar.plantogo;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -14,14 +16,21 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.utar.plantogo.example.nearbysearch.NearbySearchExample;
+import com.utar.plantogo.internal.APIRequest;
+import com.utar.plantogo.internal.db.AppDatabase;
+import com.utar.plantogo.internal.tripadvisor.TripAdvisor;
 import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.ui.RecyclerViewItemDecoration;
 import com.utar.plantogo.ui.attraction.AttractionListAdapter;
 import com.utar.plantogo.ui.carousel.CarouselLocationAdapter;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
+import java.lang.reflect.Type;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Future;
 
 /**
@@ -79,6 +88,8 @@ public class HomeFragment extends Fragment {
         // Attraction Recycler View
         attractionListRecyclerView = view.findViewById(R.id.rv_attraction_list);
 
+        // Below is the code for the nearby location search, due to the fact that it is limited per
+        // domain. We took a set of sample data from the API as our sample data.
 //        String latLong = fragmentViewModel.getLatitude() + ", " + fragmentViewModel.getLongitude();
 //        new TripAdvisor().nearbyLocationSearch(latLong, null, null, null, null, null, null, new APIRequest.ResponseCallback() {
 //            @Override

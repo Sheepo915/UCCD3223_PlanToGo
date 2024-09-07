@@ -195,6 +195,10 @@ public class AttractionFragment extends Fragment {
         return mapView;
     }
 
+    /**
+     * Instantiate the review content
+     * @param contentContainer Root container for the layout to be sit on
+     */
     private void instantiateReviewContent(LinearLayout contentContainer) {
         List<Review> reviews = location.getReviews();
 
@@ -206,6 +210,10 @@ public class AttractionFragment extends Fragment {
         }
     }
 
+    /**
+     * Setup function fot the photo carousel
+     * @param data List of photo of the location
+     */
     private void setupCarousel(List<Photo> data) {
         // Initialize and set up the carousel RecyclerView
         carouselRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
