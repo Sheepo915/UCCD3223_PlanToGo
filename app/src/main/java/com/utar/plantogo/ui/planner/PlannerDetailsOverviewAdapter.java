@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.utar.plantogo.internal.db.model.PlannedTripsDetails;
 import com.utar.plantogo.internal.db.model.PlannedTripsWithDetails;
 
+import java.util.Comparator;
 import java.util.List;
 
 public class PlannerDetailsOverviewAdapter extends RecyclerView.Adapter<PlannerDetailsOverviewAdapter.PlannerDetailsOverviewViewHolder> {
@@ -31,6 +32,7 @@ public class PlannerDetailsOverviewAdapter extends RecyclerView.Adapter<PlannerD
 
     @Override
     public void onBindViewHolder(@NonNull PlannerDetailsOverviewViewHolder holder, int position) {
+        plannedTripsDetails.sort(Comparator.comparingInt(PlannedTripsDetails::getIndex));
         PlannedTripsDetails tripDetails = plannedTripsDetails.get(position);
         holder.plannerEditComponent.setContent(tripDetails);
     }

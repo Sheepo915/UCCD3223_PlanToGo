@@ -1,14 +1,12 @@
 package com.utar.plantogo;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -16,21 +14,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.utar.plantogo.example.nearbysearch.NearbySearchExample;
-import com.utar.plantogo.internal.APIRequest;
-import com.utar.plantogo.internal.db.AppDatabase;
-import com.utar.plantogo.internal.tripadvisor.TripAdvisor;
 import com.utar.plantogo.internal.tripadvisor.model.Location;
 import com.utar.plantogo.ui.RecyclerViewItemDecoration;
 import com.utar.plantogo.ui.attraction.AttractionListAdapter;
 import com.utar.plantogo.ui.carousel.CarouselLocationAdapter;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
-import java.lang.reflect.Type;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Future;
 
 /**
@@ -145,6 +136,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupCarousel(List<Location> data) {
+        if (!isAdded()) {
+            return;
+        }
+
         // Initialize and set up the carousel RecyclerView
         carouselRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
         CarouselLocationAdapter adapter = new CarouselLocationAdapter(getContext(), data, getParentFragmentManager(), fragmentViewModel);
@@ -167,6 +162,10 @@ public class HomeFragment extends Fragment {
     }
 
     private void setupAttractionList(List<Location> data) {
+        if (!isAdded()) {
+            return;
+        }
+
         // Set the LayoutManager
         attractionListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
