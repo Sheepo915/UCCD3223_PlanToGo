@@ -24,8 +24,6 @@ import com.utar.plantogo.ui.planner.PlannerDetailsItineraryAdapter;
 import com.utar.plantogo.ui.planner.PlannerDetailsOverviewAdapter;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
-import java.util.Objects;
-
 public class PlannerEditFragment extends Fragment {
 
     private static final String PLANNED_TRIP_ID = "ID";
@@ -101,17 +99,18 @@ public class PlannerEditFragment extends Fragment {
         TextView itinerary = view.findViewById(R.id.tv_itinerary);
         RecyclerView contentContainer = view.findViewById(R.id.rv_planned_trip_container);
         TextView noTripsMessage = view.findViewById(R.id.tv_no_trips_message);
+        ImageButton mapButton = view.findViewById(R.id.ib_show_map);
 
         contentContainer.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        instantiateOverviewListener(overview, itinerary, noTripsMessage, contentContainer);
+        instantiateOverviewListener(overview, itinerary, noTripsMessage, contentContainer, mapButton);
 
         overview.setOnClickListener(v -> {
-            instantiateOverviewListener(overview, itinerary, noTripsMessage, contentContainer);
+            instantiateOverviewListener(overview, itinerary, noTripsMessage, contentContainer.mapButton);
         });
 
         itinerary.setOnClickListener(v -> {
-            instantiateItineraryListener(overview, itinerary, contentContainer);
+            instantiateItineraryListener(overview, itinerary, contentContainer, mapButton);
         });
 
         viewMap.setOnClickListener(v -> {
@@ -136,9 +135,10 @@ public class PlannerEditFragment extends Fragment {
     }
 
 
-    private void instantiateItineraryListener(TextView overview, TextView itinerary, RecyclerView contentContainer) {
+    private void instantiateItineraryListener(TextView overview, TextView itinerary, RecyclerView contentContainer, ImageButton mapButton) {
         overview.setText(R.string.overview);
         itinerary.setText(R.string.itinerary_active);
+        mapButton.setVisibility(View.VISIBLE);
 
         if (plannedTripsWithDetails.tripsDetails != null) {
             PlannerDetailsItineraryAdapter adapter = new PlannerDetailsItineraryAdapter(requireContext(), plannedTripsWithDetails.tripsDetails);
@@ -149,9 +149,10 @@ public class PlannerEditFragment extends Fragment {
         }
     }
 
-    private void instantiateOverviewListener(TextView overview, TextView itinerary, TextView noTripsMessage, RecyclerView contentContainer) {
+    private void instantiateOverviewListener(TextView overview, TextView itinerary, TextView noTripsMessage, RecyclerView contentContainer, ImageButton mapButton) {
         overview.setText(R.string.overview_active);
         itinerary.setText(R.string.itinerary);
+        mapButton.setVisibility(View.GONE);
 
         if (plannedTripsWithDetails.tripsDetails == null || plannedTripsWithDetails.tripsDetails.isEmpty()) {
             noTripsMessage.setVisibility(View.VISIBLE);
