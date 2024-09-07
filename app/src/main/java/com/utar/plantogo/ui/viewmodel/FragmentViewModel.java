@@ -11,7 +11,7 @@ import com.utar.plantogo.internal.tripadvisor.model.Location;
 import java.util.List;
 
 /**
- *
+ *  Fragment View Model for controlling the in and out of the application
  */
 public class FragmentViewModel extends ViewModel {
     private final MutableLiveData<Location> selectedLocation = new MutableLiveData<>();
