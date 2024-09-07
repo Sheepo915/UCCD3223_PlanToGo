@@ -29,54 +29,29 @@ import java.util.Map;
  */
 public class SettingFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private static final String SUPABASE_BASE_URL = BuildConfig.SUPABASE_BASE_URL;
+    private static final String SUPABASE_KEY = BuildConfig.SUPABASE_API_KEY;
     private Switch NightSwitch, NotisSwitch;
     private ImageView Help, Terms, LogOut;
     private AppCompatButton Edit;
-    private static final String SUPABASE_BASE_URL = BuildConfig.SUPABASE_BASE_URL;
-    private static final String SUPABASE_KEY = BuildConfig.SUPABASE_API_KEY;
 
     public SettingFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SettingFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SettingFragment newInstance(String param1, String param2) {
-        SettingFragment fragment = new SettingFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+
+    public static SettingFragment newInstance() {
+        return new SettingFragment();
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_setting, container, false);
 
@@ -92,7 +67,7 @@ public class SettingFragment extends Fragment {
         Help.setOnClickListener(v -> navigateToFragment(new HelpFragment()));
         Terms.setOnClickListener(v -> navigateToFragment(new TermsAndConditionsFragment()));
         Edit.setOnClickListener(v -> navigateToFragment(new EditAccountFragment()));
-        LogOut.setOnClickListener(v ->logoutUser());
+        LogOut.setOnClickListener(v -> logoutUser());
 
 
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
@@ -153,20 +128,20 @@ public class SettingFragment extends Fragment {
     private void logoutUser() {
         try {
 
-            String token = getToken(getContext());
+            String token = getToken(requireContext());
 
             APIRequest apiRequest = new APIRequest(SUPABASE_BASE_URL + "/auth/v1/logout");
             apiRequest.setRequestMethod(APIRequest.REQUEST_METHOD.POST);
             apiRequest.addHeader("Content-Type", "application/json");
             apiRequest.addHeader("apikey", SUPABASE_KEY);
-            apiRequest.addHeader("Authorization", token);
+            apiRequest.addHeader("Authorization", "Bearer " + token);
 
             apiRequest.makeRequest(new APIRequest.ResponseCallback() {
                 @Override
                 public void onSuccess(Map<String, Object> responseMap) {
                     // Handle success (e.g., navigate to login screen)
                     Log.d("LogoutUser", "User logged out successfully.");
-                    clearToken(getContext()); // Clear token from SharedPreferences
+                    clearToken(requireContext()); // Clear token from SharedPreferences
                 }
 
                 @Override
@@ -181,14 +156,14 @@ public class SettingFragment extends Fragment {
     }
 
     private void clearToken(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove("auth_token");
         editor.apply();
     }
 
     private String getToken(Context context) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences("MyAppPrefs", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences("prefs", Context.MODE_PRIVATE);
         return sharedPreferences.getString("auth_token", null); // Returns null if no token found
     }
 

@@ -35,6 +35,9 @@ import com.utar.plantogo.internal.APIRequest;
 import com.utar.plantogo.internal.db.AppDatabase;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.Map;
 import java.util.Objects;
 
@@ -345,14 +348,14 @@ public class MainActivity extends AppCompatActivity {
             apiRequest.makeRequest(new APIRequest.ResponseCallback() {
                 @Override
                 public void onSuccess(Map<String, Object> responseMap) {
-                    String accessToken = (String) responseMap.get("access_token");
+                    JSONObject jsonObject = new JSONObject(responseMap);
 
-                    if (accessToken != null) {
-                        // Successfully retrieved the token, you can now use it for authenticated requests
-                        Log.d("LoginUser", "User logged in successfully. Access Token: " + accessToken);
+                    try {
+                        // Extract the access token from the JSONObject
+                        String accessToken = jsonObject.getString("access_token");
                         saveToken(getApplicationContext(), accessToken);
-                    } else {
-                        Log.e("LoginUser", "Login successful but token not found in response.");
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
                     }
                 }
 
@@ -385,9 +388,15 @@ public class MainActivity extends AppCompatActivity {
             apiRequest.makeRequest(new APIRequest.ResponseCallback() {
                 @Override
                 public void onSuccess(Map<String, Object> responseMap) {
-                    // Handle successful registration
-                    Log.d("SupabaseAuth", "Registration successful: " + responseMap.toString());
-                    showLoginBottomSheet();
+                    JSONObject jsonObject = new JSONObject(responseMap);
+
+                    try {
+                        // Extract the access token from the JSONObject
+                        String accessToken = jsonObject.getString("access_token");
+                        saveToken(getApplicationContext(), accessToken);
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
 
                 @Override
