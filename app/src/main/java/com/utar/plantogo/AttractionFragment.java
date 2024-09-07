@@ -140,6 +140,7 @@ public class AttractionFragment extends Fragment {
         RecyclerView recyclerView = tripsDialog.findViewById(R.id.rv_planner_list_modal_container);
         Objects.requireNonNull(recyclerView).setLayoutManager(new LinearLayoutManager(requireContext()));
 
+        // Get all the saved trips
         new Thread(() -> {
             List<TripIdName> plannedTrips = db.plannedTripsDao().getAllTripsName();
 
@@ -150,10 +151,14 @@ public class AttractionFragment extends Fragment {
             });
         }).start();
 
-
         tripsDialog.show();
     }
 
+    /**
+     * Instantiate the overview content for the attraction
+     * Showcasing the details of the attraction
+     * @param contentContainer View container that the component should inflate.
+     */
     private void instantiateOverviewContent(LinearLayout contentContainer) {
         ConstraintLayout address = createOverviewInfoCard("Address", location.getAddressObj().getAddressString());
         ConstraintLayout website = null;
@@ -180,7 +185,12 @@ public class AttractionFragment extends Fragment {
 
     }
 
-
+    /**
+     * Instantiate the map view for each attraction with Google Map SDK
+     * @param latitude latitude of the location
+     * @param longitude longitude of the location
+     * @return Google Map View as a component
+     */
     private View createMapView(double latitude, double longitude) {
         MapView mapView = new MapView(requireContext());
         mapView.onCreate(null);
@@ -188,7 +198,7 @@ public class AttractionFragment extends Fragment {
         mapView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mapView.getMapAsync(googleMap -> {
             LatLng location = new LatLng(latitude, longitude);
-            googleMap.addMarker(new MarkerOptions().position(location).title("Location"));
+            googleMap.addMarker(new MarkerOptions().position(location));
             googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 15));
             mapView.post(mapView::requestLayout);
         });
