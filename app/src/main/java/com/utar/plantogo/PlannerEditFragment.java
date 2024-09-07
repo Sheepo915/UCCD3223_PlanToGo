@@ -9,11 +9,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.utar.plantogo.internal.db.AppDatabase;
 import com.utar.plantogo.internal.db.model.PlannedTripsWithDetails;
+import com.utar.plantogo.ui.DragAndDropCallback;
+import com.utar.plantogo.ui.planner.PlannerDetailsItineraryAdapter;
 import com.utar.plantogo.ui.planner.PlannerDetailsOverviewAdapter;
 
 public class PlannerEditFragment extends Fragment {
@@ -81,11 +84,23 @@ public class PlannerEditFragment extends Fragment {
         });
 
         itinerary.setOnClickListener(v -> {
-            overview.setText(R.string.overview);
-            itinerary.setText(R.string.itinerary_active);
+            instantiateItineraryListener(overview, itinerary, contentContainer);
         });
 
         return view;
+    }
+
+    private void instantiateItineraryListener(TextView overview, TextView itinerary, RecyclerView contentContainer) {
+        overview.setText(R.string.overview);
+        itinerary.setText(R.string.itinerary_active);
+
+        if (plannedTripsWithDetails.tripsDetails != null) {
+            PlannerDetailsItineraryAdapter adapter = new PlannerDetailsItineraryAdapter(requireContext(), plannedTripsWithDetails.tripsDetails);
+            contentContainer.setAdapter(adapter);
+
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new DragAndDropCallback(adapter));
+            itemTouchHelper.attachToRecyclerView(contentContainer);
+        }
     }
 
     private void instantiateOverviewListener(TextView overview, TextView itinerary, TextView noTripsMessage, RecyclerView contentContainer) {
@@ -99,8 +114,11 @@ public class PlannerEditFragment extends Fragment {
             noTripsMessage.setVisibility(View.GONE);
             contentContainer.setVisibility(View.VISIBLE);
 
+            contentContainer.clearOnChildAttachStateChangeListeners();
+
             PlannerDetailsOverviewAdapter adapter = new PlannerDetailsOverviewAdapter(requireContext(), plannedTripsWithDetails.tripsDetails);
-            contentContainer.swapAdapter(adapter, true);
+            contentContainer.setAdapter(adapter);
+
         }
     }
 

@@ -56,7 +56,6 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="4dp"
         android:maxWidth="156dp"
-        android:maxHeight="50dp"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/iv_trip_image"

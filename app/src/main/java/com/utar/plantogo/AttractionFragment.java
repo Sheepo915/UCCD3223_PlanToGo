@@ -256,7 +256,7 @@ public class AttractionFragment extends Fragment {
 
     protected ConstraintLayout createOverviewInfoCard(String title, View component) {
         ConstraintLayout constraintLayout = new ConstraintLayout(requireContext());
-        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        ConstraintLayout.LayoutParams layoutParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         constraintLayout.setLayoutParams(layoutParams);
         constraintLayout.setPadding(6, 6, 6, 6);
 
@@ -275,7 +275,8 @@ public class AttractionFragment extends Fragment {
         ConstraintLayout.LayoutParams titleParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
         titleTextView.setLayoutParams(titleParams);
 
-        ConstraintLayout.LayoutParams componentParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.WRAP_CONTENT);
+        ConstraintLayout.LayoutParams componentParams = new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, (int) (200 * getResources().getDisplayMetrics().density));
+        component.setMinimumHeight((int) (200 * getResources().getDisplayMetrics().density));
         component.setLayoutParams(componentParams);
 
         // Apply constraints using ConstraintSet

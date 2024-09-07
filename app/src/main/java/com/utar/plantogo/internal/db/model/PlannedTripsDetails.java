@@ -41,6 +41,7 @@ public class PlannedTripsDetails {
         this.createdAt = createdAt;
     }
 
+
     public PlannedTripsDetails(int plannedTripsDetailsId, int plannedTripId, int locationId, int index, String plannedTimestamp, String notes, String createdAt) {
         this.plannedTripsDetailsId = plannedTripsDetailsId;
         this.plannedTripId = plannedTripId;
@@ -49,6 +50,10 @@ public class PlannedTripsDetails {
         this.plannedTimestamp = plannedTimestamp;
         this.notes = notes;
         this.createdAt = createdAt;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 
 }
