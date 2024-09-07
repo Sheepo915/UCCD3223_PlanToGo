@@ -69,7 +69,7 @@ public class SearchFragment extends Fragment {
             searchQuery = getArguments().getString(SEARCH_QUERY);
             String latLong = fragmentViewModel.getLatitude() + ", " + fragmentViewModel.getLongitude();
             new Thread(() -> {
-                new TripAdvisor().locationSearch(searchQuery, latLong, null, null, null, null, null, null, new APIRequest.ResponseCallback() {
+                new TripAdvisor().locationSearch(searchQuery, latLong, null, null, null, String.valueOf(30), null, null, new APIRequest.ResponseCallback() {
                     @Override
                     public void onSuccess(Map<String, Object> responseMap) {
                         Gson gson = new Gson();

@@ -13,46 +13,7 @@
         android:background="@drawable/search_view_background"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/categories_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginVertical="8dp"
-        android:layout_marginStart="10dp"
-        android:text="Categories"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sv_attraction_search" />
 
-    <Button
-        android:id="@+id/btn_hotel_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="8dp"
-        android:text="Hotels"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categories_header" />
-
-    <Button
-        android:id="@+id/btn_restaurant_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="8dp"
-        android:text="Restaurant"
-        app:layout_constraintStart_toEndOf="@id/btn_hotel_category"
-        app:layout_constraintTop_toBottomOf="@+id/categories_header" />
-
-    <Button
-        android:id="@+id/btn_attraction_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginVertical="8dp"
-        android:text="Attraction"
-        app:layout_constraintStart_toEndOf="@+id/btn_restaurant_category"
-        app:layout_constraintTop_toBottomOf="@+id/categories_header" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_attraction_list"
@@ -62,7 +23,7 @@
         android:layout_marginHorizontal="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_hotel_category"
+        app:layout_constraintTop_toBottomOf="@id/sv_attraction_search"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
