@@ -19,21 +19,6 @@
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"
       app:layout_constraintVertical_bias="0.457"
-      app:srcCompat="@drawable/ic_home" />
+      app:srcCompat="@drawable/plantogo" />
 
-  <TextView
-      android:id="@+id/Splash_AppName"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:fontFamily="@font/delius_swash_caps"
-      android:text="PlanToGo"
-      android:textSize="34sp"
-      android:textStyle="bold"
-      android:transitionName="splash_text"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.498"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"
-      app:layout_constraintVertical_bias="0.632" />
 </androidx.constraintlayout.widget.ConstraintLayout>
