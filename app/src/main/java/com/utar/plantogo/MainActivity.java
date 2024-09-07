@@ -220,14 +220,6 @@ public class MainActivity extends AppCompatActivity {
         if (showActionBar) {
             toolbar.setVisibility(View.VISIBLE);
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(!isRoot);
-            toolbar.setNavigationOnClickListener(v -> {
-                if (isRoot) {
-                    return;
-                }
-                if (onBackPressedCallback.isEnabled()) {
-                    onBackPressedCallback.handleOnBackPressed();
-                }
-            });
         } else {
             toolbar.setVisibility(View.GONE);
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(false);
