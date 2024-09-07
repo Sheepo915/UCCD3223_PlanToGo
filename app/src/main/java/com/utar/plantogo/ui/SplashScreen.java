@@ -1,12 +1,11 @@
 package com.utar.plantogo.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.animation.AnimationUtils;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.utar.plantogo.MainActivity;
 import com.utar.plantogo.R;
@@ -23,6 +22,6 @@ public class SplashScreen extends AppCompatActivity {
             Intent intent = new Intent(SplashScreen.this, MainActivity.class);
             startActivities(new Intent[]{intent});
             finish();
-        },1500);
+        },3000);
     }
 }
