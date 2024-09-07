@@ -31,12 +31,9 @@ import java.util.Map;
  */
 public class SearchFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String SEARCH_QUERY = "search_query";
     private static final String PRELOAD_DATA = "preload_data";
 
-    // TODO: Rename and change types of parameters
     private String searchQuery;
     private List<Location> preloadData;
 

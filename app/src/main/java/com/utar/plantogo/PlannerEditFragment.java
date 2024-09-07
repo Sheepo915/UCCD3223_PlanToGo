@@ -4,11 +4,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -18,6 +22,7 @@ import com.utar.plantogo.internal.db.model.PlannedTripsWithDetails;
 import com.utar.plantogo.ui.DragAndDropCallback;
 import com.utar.plantogo.ui.planner.PlannerDetailsItineraryAdapter;
 import com.utar.plantogo.ui.planner.PlannerDetailsOverviewAdapter;
+import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
 public class PlannerEditFragment extends Fragment {
 
@@ -25,6 +30,7 @@ public class PlannerEditFragment extends Fragment {
     private int tripId;
 
     private PlannedTripsWithDetails plannedTripsWithDetails;
+    private FragmentViewModel fragmentViewModel;
 
     public PlannerEditFragment() {
     }
@@ -40,6 +46,8 @@ public class PlannerEditFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        fragmentViewModel = new ViewModelProvider(requireActivity()).get(FragmentViewModel.class);
 
         if (getArguments() != null) {
             tripId = getArguments().getInt(PLANNED_TRIP_ID);
@@ -58,6 +66,8 @@ public class PlannerEditFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_planner_details, container, false);
 
+        ImageButton viewMap = view.findViewById(R.id.ib_show_map);
+
         TextView tripName = view.findViewById(R.id.tv_trip_name);
         tripName.setText(plannedTripsWithDetails.plannedTrips.tripName);
 
@@ -75,7 +85,6 @@ public class PlannerEditFragment extends Fragment {
 
         TextView noTripsMessage = view.findViewById(R.id.tv_no_trips_message);
 
-
         // Default view
         instantiateOverviewListener(overview, itinerary, noTripsMessage, contentContainer);
 
@@ -85,6 +94,16 @@ public class PlannerEditFragment extends Fragment {
 
         itinerary.setOnClickListener(v -> {
             instantiateItineraryListener(overview, itinerary, contentContainer);
+        });
+
+        viewMap.setOnClickListener(v -> {
+            fragmentViewModel.setPlannedTripsDetails(plannedTripsWithDetails.tripsDetails);
+
+            MapItineraryFragment mapFragment = new MapItineraryFragment();
+            FragmentManager fragmentManager = getParentFragmentManager();
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.replace(R.id.root_fragment_container, mapFragment).addToBackStack(null);
+            fragmentTransaction.commit();
         });
 
         return view;
