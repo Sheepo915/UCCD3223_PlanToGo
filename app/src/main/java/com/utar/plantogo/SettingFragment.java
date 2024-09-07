@@ -142,7 +142,9 @@ public class SettingFragment extends Fragment {
                     // Handle success (e.g., navigate to login screen)
                     Log.d("LogoutUser", "User logged out successfully.");
                     clearToken(requireContext()); // Clear token from SharedPreferences
-                    Toast.makeText(getActivity(),"Logged Out.",Toast.LENGTH_SHORT).show();
+                    requireActivity().runOnUiThread(() ->
+                            Toast.makeText(getActivity(), "Logged Out.", Toast.LENGTH_SHORT).show()
+                    );
                 }
 
                 @Override
