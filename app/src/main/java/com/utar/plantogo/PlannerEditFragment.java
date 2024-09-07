@@ -77,13 +77,14 @@ public class PlannerEditFragment extends Fragment {
         TextView itinerary = view.findViewById(R.id.tv_itinerary);
         RecyclerView contentContainer = view.findViewById(R.id.rv_planned_trip_container);
         TextView noTripsMessage = view.findViewById(R.id.tv_no_trips_message);
+        ImageButton mapButton = view.findViewById(R.id.ib_show_map);
 
         tripName.setText(plannedTripsWithDetails.plannedTrips.tripName);
         String startToEndDate = plannedTripsWithDetails.plannedTrips.startDate + " - " + plannedTripsWithDetails.plannedTrips.endDate;
         tripDate.setText(startToEndDate);
 
         // Decide which view to show
-        instantiateOverviewListener(overview, itinerary, noTripsMessage, contentContainer);
+        instantiateOverviewListener(overview, itinerary, noTripsMessage, contentContainer, mapButton);
     }
 
 
@@ -106,7 +107,7 @@ public class PlannerEditFragment extends Fragment {
         instantiateOverviewListener(overview, itinerary, noTripsMessage, contentContainer, mapButton);
 
         overview.setOnClickListener(v -> {
-            instantiateOverviewListener(overview, itinerary, noTripsMessage, contentContainer.mapButton);
+            instantiateOverviewListener(overview, itinerary, noTripsMessage, contentContainer, mapButton);
         });
 
         itinerary.setOnClickListener(v -> {
