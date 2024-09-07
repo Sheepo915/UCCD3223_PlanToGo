@@ -24,6 +24,8 @@ import com.utar.plantogo.ui.planner.PlannerDetailsItineraryAdapter;
 import com.utar.plantogo.ui.planner.PlannerDetailsOverviewAdapter;
 import com.utar.plantogo.ui.viewmodel.FragmentViewModel;
 
+import java.util.Objects;
+
 public class PlannerEditFragment extends Fragment {
 
     private static final String PLANNED_TRIP_ID = "ID";
@@ -53,13 +55,39 @@ public class PlannerEditFragment extends Fragment {
             tripId = getArguments().getInt(PLANNED_TRIP_ID);
         }
 
-        AppDatabase db = AppDatabase.getInstance(requireContext());
-        if (tripId != -1) {
-            new Thread(() -> {
-                plannedTripsWithDetails = db.plannedTripsDao().getPlannedTripsWithDetailsById(tripId);
-            }).start();
-        }
+        loadPlannedTripsWithDetails(tripId);
     }
+
+    private void loadPlannedTripsWithDetails(int tripId) {
+        AppDatabase db = AppDatabase.getInstance(requireContext());
+        new Thread(() -> {
+            plannedTripsWithDetails = db.plannedTripsDao().getPlannedTripsWithDetailsById(tripId);
+
+            // Post results to the main thread
+            requireActivity().runOnUiThread(() -> {
+                if (getView() != null) {
+                    updateUIWithData(getView(), plannedTripsWithDetails);
+                }
+            });
+        }).start();
+    }
+
+    private void updateUIWithData(View view, PlannedTripsWithDetails plannedTripsWithDetails) {
+        TextView tripName = view.findViewById(R.id.tv_trip_name);
+        TextView tripDate = view.findViewById(R.id.tv_date);
+        TextView overview = view.findViewById(R.id.tv_overview);
+        TextView itinerary = view.findViewById(R.id.tv_itinerary);
+        RecyclerView contentContainer = view.findViewById(R.id.rv_planned_trip_container);
+        TextView noTripsMessage = view.findViewById(R.id.tv_no_trips_message);
+
+        tripName.setText(plannedTripsWithDetails.plannedTrips.tripName);
+        String startToEndDate = plannedTripsWithDetails.plannedTrips.startDate + " - " + plannedTripsWithDetails.plannedTrips.endDate;
+        tripDate.setText(startToEndDate);
+
+        // Decide which view to show
+        instantiateOverviewListener(overview, itinerary, noTripsMessage, contentContainer);
+    }
+
 
     @Nullable
     @Override
@@ -67,25 +95,15 @@ public class PlannerEditFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_planner_details, container, false);
 
         ImageButton viewMap = view.findViewById(R.id.ib_show_map);
-
         TextView tripName = view.findViewById(R.id.tv_trip_name);
-        tripName.setText(plannedTripsWithDetails.plannedTrips.tripName);
-
         TextView tripDate = view.findViewById(R.id.tv_date);
-        String startToEndDate = plannedTripsWithDetails.plannedTrips.startDate + " - " + plannedTripsWithDetails.plannedTrips.endDate;
-        tripDate.setText(startToEndDate);
-
-        // Set default activated content
         TextView overview = view.findViewById(R.id.tv_overview);
-
         TextView itinerary = view.findViewById(R.id.tv_itinerary);
-
         RecyclerView contentContainer = view.findViewById(R.id.rv_planned_trip_container);
-        contentContainer.setLayoutManager(new LinearLayoutManager(requireContext()));
-
         TextView noTripsMessage = view.findViewById(R.id.tv_no_trips_message);
 
-        // Default view
+        contentContainer.setLayoutManager(new LinearLayoutManager(requireContext()));
+
         instantiateOverviewListener(overview, itinerary, noTripsMessage, contentContainer);
 
         overview.setOnClickListener(v -> {
@@ -97,17 +115,26 @@ public class PlannerEditFragment extends Fragment {
         });
 
         viewMap.setOnClickListener(v -> {
-            fragmentViewModel.setPlannedTripsDetails(plannedTripsWithDetails.tripsDetails);
-
-            MapItineraryFragment mapFragment = new MapItineraryFragment();
-            FragmentManager fragmentManager = getParentFragmentManager();
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.root_fragment_container, mapFragment).addToBackStack(null);
-            fragmentTransaction.commit();
+            handleMapNavigation();
         });
+
+        if (plannedTripsWithDetails != null) {
+            updateUIWithData(view, plannedTripsWithDetails);
+        }
 
         return view;
     }
+
+    private void handleMapNavigation() {
+        fragmentViewModel.setPlannedTripsDetails(plannedTripsWithDetails.tripsDetails);
+
+        MapItineraryFragment mapFragment = new MapItineraryFragment();
+        FragmentManager fragmentManager = getParentFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.root_fragment_container, mapFragment).addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
 
     private void instantiateItineraryListener(TextView overview, TextView itinerary, RecyclerView contentContainer) {
         overview.setText(R.string.overview);

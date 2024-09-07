@@ -58,4 +58,5 @@ public class FragmentViewModel extends ViewModel {
     public List<PlannedTripsDetails> getPlannedTripsDetails() {
         return plannedTripsDetails;
     }
+
 }
